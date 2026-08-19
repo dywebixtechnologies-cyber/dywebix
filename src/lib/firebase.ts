@@ -13,20 +13,38 @@ import { getAuth, type Auth } from 'firebase/auth';
 // These values are not secrets — they identify the project and ship in every
 // client bundle by design; access is controlled by the database rules
 // (database.rules.json), not by hiding this config. Set them in a .env file.
-const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID ?? '';
+// The live project's config, committed on purpose. Firebase web config is a
+// public identifier, not a credential — it is served to every visitor inside
+// the JS bundle no matter what, so hiding it buys nothing. What actually
+// protects the project is database.rules.json plus the Authorized domains
+// list in Firebase Auth. Committing it means a deploy works without anyone
+// having to remember to set environment variables.
+//
+// The .env values still win, so a different project can be pointed at without
+// touching this file.
+const DEFAULTS = {
+  apiKey: 'AIzaSyBZlloNo565Kvk_9QYjGCbi1GzowUU6rik',
+  authDomain: 'dywebix.firebaseapp.com',
+  projectId: 'dywebix',
+  storageBucket: 'dywebix.firebasestorage.app',
+  messagingSenderId: '40689726664',
+  appId: '1:40689726664:web:9700e01017a1d45034a1fd',
+};
+
+const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID || DEFAULTS.projectId;
 
 const config = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? '',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ?? '',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || DEFAULTS.apiKey,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || DEFAULTS.authDomain,
   projectId,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET ?? '',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID ?? '',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID ?? '',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || DEFAULTS.storageBucket,
+  messagingSenderId:
+    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || DEFAULTS.messagingSenderId,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || DEFAULTS.appId,
   // Non-US database instances live on a regional host, so the URL can't always
   // be derived — set VITE_FIREBASE_DATABASE_URL when the console shows one.
-  databaseURL:
-    import.meta.env.VITE_FIREBASE_DATABASE_URL ||
-    (projectId ? `https://${projectId}-default-rtdb.firebaseio.com` : ''),
+  // Left underivable until the database is actually created.
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || '',
 };
 
 /** Enough config to start the app at all — this is what Auth needs. */
