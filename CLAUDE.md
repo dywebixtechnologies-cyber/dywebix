@@ -37,12 +37,25 @@ Home-page navigation is not routing: `handleSectionChange` scrolls to `#{section
 
 Two independent stores, both plain JSON in `localStorage`, both read/written directly by components (no repository layer):
 
-- **`inquiries`** — array of `Inquiry` (`src/types.ts`). Written by `ContactForm`, mutated by `AdminInbox` (read/accept/finish/rate/delete), read by `UserDashboard` (filtered by `ownerEmail`) and by `App.calculateUnreadCount` for the nav badge. `AdminInbox` seeds a sample inquiry when the key is absent, which is why `App` defaults `unreadCount` to 1. The full inquiry lifecycle (`read → accepted → finished` + `rate`) lives on this one record shape; revenue totals only count `finished`.
+- **`inquiries`** — array of `Inquiry` (`src/types.ts`), now behind `src/lib/inquiries.ts` rather than read from `localStorage` directly. See **Inquiry storage** below.
 - **`dywebix-users` / `dywebix-current-user`** — `src/context/AuthContext.tsx`. `AuthProvider` wraps the app in `main.tsx`; use `useAuth()` for `user`, `isAdmin`, `login`, `signup`, `loginWithGoogle`, `logout`.
 
 Because there is no server, mutations from a dashboard don't notify other components automatically — `App` passes `calculateUnreadCount` down as `onInquiryCountChange` so writers can trigger a re-count. Follow that pattern rather than adding a store.
 
 Admin credentials are hardcoded constants at the top of `AuthContext.tsx` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`) and ship in the client bundle — deliberate for this static site. `GOOGLE_CLIENT_ID` in the same file is empty; the "Continue with Google" button stays disabled until a real Client ID is set — there is no demo/offline identity, and `loginWithGoogle` rejects any call without a verified name and email.
+
+### Inquiry storage
+
+`src/lib/inquiries.ts` is the only module that touches inquiry storage — components call its async API and never read `localStorage` or Firestore themselves. It has two backends behind one interface:
+
+- **Firestore** when the `VITE_FIREBASE_*` vars are set (see `.env.example`); `src/lib/firebase.ts` initialises lazily and `isFirebaseConfigured()` gates it.
+- **`localStorage`** otherwise, so the site runs with no setup — same behaviour as before the database existed.
+
+Every function is async in both modes, so adding config never changes a caller. `updateInquiry` maps `undefined` values to `deleteField()` because Firestore rejects undefined outright. The sample inquiry seed lives here (`SAMPLE_INQUIRY`) and is written when the store is empty, which is why the nav badge shows 1 on a fresh install.
+
+Writers are `ContactForm` (create) and `AdminInbox` (read/accept/finish/rate/delete — optimistic local state, then a background write that re-syncs from the store if it fails). Readers are `UserDashboard` (`listInquiriesFor(ownerEmail)`) and `App.calculateUnreadCount` (`countUnread`). `subscribeInquiries` exists for live updates but nothing subscribes yet.
+
+`firestore.rules` is permissive on purpose — the admin login is a client-side constant, so there is no server-verified identity to key rules off. Treat everything in `inquiries` as public data.
 
 ### 3D / animation components
 

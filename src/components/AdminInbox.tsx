@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Inquiry } from '../types';
 import { Trash2, CheckCircle, Mail, MessageSquare, BookOpen, IndianRupee, Search, PlusCircle, LayoutGrid, CheckSquare, BarChart, ArrowRight, Users } from 'lucide-react';
 import { getRegisteredUserCount } from '../context/AuthContext';
+import { deleteInquiry, listInquiries, updateInquiry } from '../lib/inquiries';
 
 interface AdminInboxProps {
   onInquiryCountChange: () => void;
@@ -22,30 +23,9 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
 
   // Load inquiries initially and listen for counts
   const loadInquiries = () => {
-    try {
-      const storedStr = localStorage.getItem('inquiries');
-      if (storedStr) {
-        setInquiries(JSON.parse(storedStr));
-      } else {
-        // Pre-populate with one lovely sample if completely empty
-        const sampleInquiry: Inquiry = {
-          id: 'PROJ-1',
-          name: 'Adrian Croft',
-          email: 'adrian@creativeagency.co',
-          company: 'Croft Creative Studio',
-          projectType: 'Creative Agency/Editorial Portfolio',
-          budget: '₹2,50,000 - ₹4,00,000',
-          timeline: 'Standard (3-4 weeks)',
-          details: 'We are looking for a highly refined portfolio gallery to showcase our architectural renders. Needs to load within 0.8 seconds and support smooth high-fidelity transitions between pages.',
-          timestamp: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
-          read: false
-        };
-        localStorage.setItem('inquiries', JSON.stringify([sampleInquiry]));
-        setInquiries([sampleInquiry]);
-      }
-    } catch (err) {
-      console.error('Error loading Admin inquiries', err);
-    }
+    listInquiries()
+      .then(setInquiries)
+      .catch((err) => console.error('Error loading Admin inquiries', err));
   };
 
   useEffect(() => {
@@ -58,78 +38,53 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
     setRateDraft(selectedInquiry?.rate ?? '');
   }, [selectedInquiry?.id]);
 
-  const handleToggleRead = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const updatedInquiries = inquiries.map((inq) => {
-      if (inq.id === id) {
-        return { ...inq, read: !inq.read };
-      }
-      return inq;
+  /**
+   * Update one inquiry locally straight away, then write it to the store.
+   * Keeps the UI instant while the database round-trip happens in the background.
+   */
+  const applyPatch = (id: string, patch: Partial<Inquiry>) => {
+    setInquiries((prev) => prev.map((inq) => (inq.id === id ? { ...inq, ...patch } : inq)));
+    setSelectedInquiry((prev) => (prev?.id === id ? { ...prev, ...patch } : prev));
+    updateInquiry(id, patch).catch((err) => {
+      console.error('Could not save that change', err);
+      loadInquiries(); // Re-sync from the store so the UI stops showing a write that failed.
     });
-
-    localStorage.setItem('inquiries', JSON.stringify(updatedInquiries));
-    setInquiries(updatedInquiries);
-    // If the selected inquiry is being read, update selectedInquiry state too
-    if (selectedInquiry?.id === id) {
-      setSelectedInquiry((prev) => prev ? { ...prev, read: !prev.read } : null);
-    }
-    onInquiryCountChange();
   };
 
-  const persistInquiries = (updated: Inquiry[]) => {
-    localStorage.setItem('inquiries', JSON.stringify(updated));
-    setInquiries(updated);
+  const handleToggleRead = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const current = inquiries.find((inq) => inq.id === id);
+    if (!current) return;
+    applyPatch(id, { read: !current.read });
+    onInquiryCountChange();
   };
 
   const handleToggleAccept = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    const updatedInquiries = inquiries.map((inq) => {
-      if (inq.id === id) {
-        const nextAccepted = !inq.accepted;
-        return {
-          ...inq,
-          accepted: nextAccepted,
-          // Stamp the acceptance date so the client can see how many days have passed.
-          acceptedAt: nextAccepted ? new Date().toISOString() : undefined,
-        };
-      }
-      return inq;
+    const current = inquiries.find((inq) => inq.id === id);
+    if (!current) return;
+    const nextAccepted = !current.accepted;
+    applyPatch(id, {
+      accepted: nextAccepted,
+      // Stamp the acceptance date so the client can see how many days have passed.
+      acceptedAt: nextAccepted ? new Date().toISOString() : undefined,
     });
-
-    persistInquiries(updatedInquiries);
-    if (selectedInquiry?.id === id) {
-      setSelectedInquiry(updatedInquiries.find((i) => i.id === id) ?? null);
-    }
     onInquiryCountChange();
   };
 
   const handleToggleFinished = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    const updatedInquiries = inquiries.map((inq) => {
-      if (inq.id === id) {
-        const nextFinished = !inq.finished;
-        return {
-          ...inq,
-          finished: nextFinished,
-          finishedAt: nextFinished ? new Date().toISOString() : undefined,
-        };
-      }
-      return inq;
+    const current = inquiries.find((inq) => inq.id === id);
+    if (!current) return;
+    const nextFinished = !current.finished;
+    applyPatch(id, {
+      finished: nextFinished,
+      finishedAt: nextFinished ? new Date().toISOString() : undefined,
     });
-    persistInquiries(updatedInquiries);
-    if (selectedInquiry?.id === id) {
-      setSelectedInquiry(updatedInquiries.find((i) => i.id === id) ?? null);
-    }
   };
 
   const handleSetRate = (id: string) => {
-    const updatedInquiries = inquiries.map((inq) =>
-      inq.id === id ? { ...inq, rate: rateDraft.trim() || undefined } : inq
-    );
-    persistInquiries(updatedInquiries);
-    if (selectedInquiry?.id === id) {
-      setSelectedInquiry(updatedInquiries.find((i) => i.id === id) ?? null);
-    }
+    applyPatch(id, { rate: rateDraft.trim() || undefined });
   };
 
   const handleDelete = (id: string, e: React.MouseEvent) => {
@@ -137,12 +92,12 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
     const confirmed = window.confirm('Are you sure you want to permanently delete this inquiry?');
     if (!confirmed) return;
 
-    const filtered = inquiries.filter((inq) => inq.id !== id);
-    localStorage.setItem('inquiries', JSON.stringify(filtered));
-    setInquiries(filtered);
-    if (selectedInquiry?.id === id) {
-      setSelectedInquiry(null);
-    }
+    setInquiries((prev) => prev.filter((inq) => inq.id !== id));
+    if (selectedInquiry?.id === id) setSelectedInquiry(null);
+    deleteInquiry(id).catch((err) => {
+      console.error('Could not delete that inquiry', err);
+      loadInquiries();
+    });
     onInquiryCountChange();
   };
 
@@ -150,15 +105,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
     setSelectedInquiry(inq);
     // Auto-mark as read when selected
     if (!inq.read) {
-      const updated = inquiries.map((item) => {
-        if (item.id === inq.id) {
-          return { ...item, read: true };
-        }
-        return item;
-      });
-      localStorage.setItem('inquiries', JSON.stringify(updated));
-      setInquiries(updated);
-      setSelectedInquiry({ ...inq, read: true });
+      applyPatch(inq.id, { read: true });
       onInquiryCountChange();
     }
   };

@@ -9,6 +9,7 @@ import { LogOut, ArrowLeft, ArrowRight, FolderKanban, CheckCircle2, Clock, Hourg
 import { Logo } from './Logo';
 import { useAuth } from '../context/AuthContext';
 import { Inquiry } from '../types';
+import { listInquiriesFor } from '../lib/inquiries';
 
 function daysSince(iso?: string): number | null {
   if (!iso) return null;
@@ -22,18 +23,22 @@ export function UserDashboard() {
   const [projects, setProjects] = useState<Inquiry[]>([]);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('inquiries');
-      const all: Inquiry[] = stored ? JSON.parse(stored) : [];
-      const mine = all.filter(
-        (inq) => inq.ownerEmail?.toLowerCase() === user?.email.toLowerCase()
-      );
-      // Newest first
-      mine.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-      setProjects(mine);
-    } catch {
+    if (!user) {
       setProjects([]);
+      return;
     }
+    let cancelled = false;
+    listInquiriesFor(user.email)
+      .then((mine) => {
+        if (cancelled) return;
+        // Newest first
+        mine.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        setProjects(mine);
+      })
+      .catch(() => !cancelled && setProjects([]));
+    return () => {
+      cancelled = true;
+    };
   }, [user]);
 
   const handleLogout = () => {

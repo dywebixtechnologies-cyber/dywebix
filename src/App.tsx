@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { PageLoader } from './components/Loader';
+import { countUnread } from './lib/inquiries';
 import { motion, AnimatePresence } from 'motion/react';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
@@ -40,19 +41,9 @@ export default function App() {
 
   // Count unread inquiries to feed the nav indicator badge reactive data
   const calculateUnreadCount = () => {
-    try {
-      const stored = localStorage.getItem('inquiries');
-      if (stored) {
-        const list: Inquiry[] = JSON.parse(stored);
-        const unread = list.filter(item => !item.read).length;
-        setUnreadCount(unread);
-      } else {
-        // Default to 1 for the sample pre-populated message
-        setUnreadCount(1);
-      }
-    } catch (err) {
-      console.error('Error counting unread state', err);
-    }
+    countUnread()
+      .then(setUnreadCount)
+      .catch((err) => console.error('Error counting unread state', err));
   };
 
   useEffect(() => {

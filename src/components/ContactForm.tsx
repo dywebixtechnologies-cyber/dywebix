@@ -9,6 +9,7 @@ import { PROJECT_TYPES } from '../data/portfolioData';
 import { Inquiry } from '../types';
 import { CheckCircle2, ChevronRight, FileCheck, HelpCircle, Send, Sparkles, MessageCircle, LogIn } from 'lucide-react';
 import { Loader } from './Loader';
+import { createInquiry, listInquiries, listInquiriesFor } from '../lib/inquiries';
 import { useAuth } from '../context/AuthContext';
 
 // Studio WhatsApp contact (India, +91). Shown once a client has shared an idea.
@@ -45,13 +46,9 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
     if (user) {
       setName(user.name);
       setEmail(user.email);
-      try {
-        const stored = localStorage.getItem('inquiries');
-        const all: Inquiry[] = stored ? JSON.parse(stored) : [];
-        setHasSharedIdea(all.some((inq) => inq.ownerEmail?.toLowerCase() === user.email.toLowerCase()));
-      } catch {
-        setHasSharedIdea(false);
-      }
+      listInquiriesFor(user.email)
+        .then((mine) => setHasSharedIdea(mine.length > 0))
+        .catch(() => setHasSharedIdea(false));
     }
   }, [user]);
 
@@ -98,54 +95,50 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      // Read current localStorage array first to assign a sequential project token
-      let existingInquiries: Inquiry[] = [];
+    void (async () => {
       try {
-        const storedStr = localStorage.getItem('inquiries');
-        if (storedStr) {
-          existingInquiries = JSON.parse(storedStr);
-        }
+        // Read the existing inquiries to assign the next sequential project token
+        // (PROJ-1, PROJ-2, ...). Fine at this scale; a busy inbox would want a
+        // server-side counter instead.
+        const existingInquiries = await listInquiries();
+        const maxProjNum = existingInquiries.reduce((max, inq) => {
+          const match = /PROJ-(\d+)/.exec(inq.id);
+          return match ? Math.max(max, parseInt(match[1], 10)) : max;
+        }, 0);
+        const projectId = 'PROJ-' + (maxProjNum + 1);
+
+        const newInquiry: Inquiry = {
+          id: projectId,
+          name: name.trim(),
+          email: email.trim(),
+          company: company.trim() || undefined,
+          projectType,
+          budget,
+          timeline,
+          details: details.trim(),
+          timestamp: new Date().toISOString(),
+          read: false,
+          accepted: false,
+          ownerEmail: user?.email
+        };
+
+        await createInquiry(newInquiry);
+
+        // Reset only the project-specific fields (keep the signed-in profile).
+        setCompany('');
+        setDetails('');
+        setProjectType('');
+
+        setSubmissionReceipt(projectId);
+        setHasSharedIdea(true);
+        onInquirySubmitted(); // Notify parent state to increment badges
       } catch (err) {
-        console.error('Error reading prior inquiries', err);
+        console.error('Could not save the inquiry', err);
+        setErrors({ submit: 'Could not send your brief. Check your connection and try again.' });
+      } finally {
+        setIsSubmitting(false);
       }
-
-      // Assign the next sequential project token (PROJ-1, PROJ-2, PROJ-3, ...)
-      const maxProjNum = existingInquiries.reduce((max, inq) => {
-        const match = /PROJ-(\d+)/.exec(inq.id);
-        return match ? Math.max(max, parseInt(match[1], 10)) : max;
-      }, 0);
-      const projectId = 'PROJ-' + (maxProjNum + 1);
-
-      const newInquiry: Inquiry = {
-        id: projectId,
-        name: name.trim(),
-        email: email.trim(),
-        company: company.trim() || undefined,
-        projectType,
-        budget,
-        timeline,
-        details: details.trim(),
-        timestamp: new Date().toISOString(),
-        read: false,
-        accepted: false,
-        ownerEmail: user?.email
-      };
-
-      // Add to array and save
-      existingInquiries.push(newInquiry);
-      localStorage.setItem('inquiries', JSON.stringify(existingInquiries));
-
-      // Reset only the project-specific fields (keep the signed-in profile).
-      setCompany('');
-      setDetails('');
-      setProjectType('');
-
-      setIsSubmitting(false);
-      setSubmissionReceipt(projectId);
-      setHasSharedIdea(true);
-      onInquirySubmitted(); // Notify parent state to increment badges
-    }, 1200); // Realistic slight submission timeout for premium feel
+    })();
   };
 
   return (
@@ -308,6 +301,10 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                       {errors.details && <span className="text-[10px] text-red-500 font-mono mt-1">{errors.details}</span>}
                     </div>
                   </div>
+
+                  {errors.submit && (
+                    <span className="text-[11px] text-red-500 font-mono">{errors.submit}</span>
+                  )}
 
                   <button
                     type="submit"
