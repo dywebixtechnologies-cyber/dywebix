@@ -48,14 +48,14 @@ Admin credentials are hardcoded constants at the top of `AuthContext.tsx` (`ADMI
 
 `src/lib/inquiries.ts` is the only module that touches inquiry storage — components call its async API and never read `localStorage` or Firestore themselves. It has two backends behind one interface:
 
-- **Firestore** when the `VITE_FIREBASE_*` vars are set (see `.env.example`); `src/lib/firebase.ts` initialises lazily and `isFirebaseConfigured()` gates it.
+- **Firebase Realtime Database** when the `VITE_FIREBASE_*` vars are set (see `.env.example`); `src/lib/firebase.ts` initialises lazily and `isFirebaseConfigured()` gates it. RTDB rather than Firestore because new Firestore databases require a billing account.
 - **`localStorage`** otherwise, so the site runs with no setup — same behaviour as before the database existed.
 
-Every function is async in both modes, so adding config never changes a caller. `updateInquiry` maps `undefined` values to `deleteField()` because Firestore rejects undefined outright. The sample inquiry seed lives here (`SAMPLE_INQUIRY`) and is written when the store is empty, which is why the nav badge shows 1 on a fresh install.
+Every function is async in both modes, so adding config never changes a caller. Inquiries are stored keyed by id under `/inquiries`, so `listInquiries` flattens the object back to a sorted array. `updateInquiry` maps `undefined` values to `null` (which deletes a key) because the database rejects undefined outright. The sample inquiry seed lives here (`SAMPLE_INQUIRY`) and is written when the store is empty, which is why the nav badge shows 1 on a fresh install.
 
 Writers are `ContactForm` (create) and `AdminInbox` (read/accept/finish/rate/delete — optimistic local state, then a background write that re-syncs from the store if it fails). Readers are `UserDashboard` (`listInquiriesFor(ownerEmail)`) and `App.calculateUnreadCount` (`countUnread`). `subscribeInquiries` exists for live updates but nothing subscribes yet.
 
-`firestore.rules` is permissive on purpose — the admin login is a client-side constant, so there is no server-verified identity to key rules off. Treat everything in `inquiries` as public data.
+`database.rules.json` is permissive on purpose — the admin login is a client-side constant, so there is no server-verified identity to key rules off. Treat everything in `inquiries` as public data.
 
 ### 3D / animation components
 

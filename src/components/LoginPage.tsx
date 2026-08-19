@@ -3,18 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { LogIn, UserPlus, ArrowLeft, ShieldCheck } from 'lucide-react';
+import { LogIn, UserPlus, ArrowLeft, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { Logo } from './Logo';
-import { useAuth, GOOGLE_CLIENT_ID, isGoogleConfigured } from '../context/AuthContext';
-
-// Google Identity Services attaches itself to window.google once its script loads.
-declare global {
-  interface Window {
-    google?: any;
-  }
-}
+import { useAuth } from '../context/AuthContext';
+import { isFirebaseConfigured } from '../lib/firebase';
+import { signInWithGoogle } from '../lib/googleAuth';
 
 type Mode = 'login' | 'signup';
 
@@ -27,23 +22,15 @@ export function LoginPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const resetMessages = () => setError('');
 
-  // Only a configured Client ID makes the Google button usable.
-  const googleReady = isGoogleConfigured();
-
-  // Load the Google Identity Services script once a real Client ID is configured.
-  useEffect(() => {
-    if (!isGoogleConfigured() || document.getElementById('google-gsi-script')) return;
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.id = 'google-gsi-script';
-    document.body.appendChild(script);
-  }, []);
+  // Firebase Auth performs the OAuth handshake, so no separate Client ID is
+  // needed — the button is usable as soon as the project config is present.
+  const googleReady = isFirebaseConfigured();
+  const [googleBusy, setGoogleBusy] = useState(false);
 
   const routeAfterAuth = (role?: 'admin' | 'user') => {
     // Admins land on the admin dashboard; users on their own dashboard.
@@ -63,38 +50,27 @@ export function LoginPage() {
   };
 
   const handleGoogle = () => {
-    // Google sign-in is real OAuth only. With no Client ID (or before the GSI
-    // script has loaded) there is nothing to fall back to, so say so plainly.
-    if (!isGoogleConfigured()) {
+    // Real Google OAuth only, run by Firebase Auth. There is no demo fallback.
+    if (!googleReady) {
       setError('Google sign-in is not configured yet. Use your email and password.');
       return;
     }
-    if (!window.google?.accounts?.oauth2) {
-      setError('Google sign-in is still loading. Try again in a moment.');
-      return;
-    }
 
-    const client = window.google.accounts.oauth2.initTokenClient({
-      client_id: GOOGLE_CLIENT_ID,
-      scope: 'openid email profile',
-      callback: async (resp: { access_token?: string; error?: string }) => {
-        if (resp.error || !resp.access_token) {
-          setError('Google sign-in was cancelled.');
-          return;
-        }
-        try {
-          const info = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-            headers: { Authorization: `Bearer ${resp.access_token}` },
-          }).then((r) => r.json());
-          const result = loginWithGoogle(info.name, info.email);
-          if (result.ok) routeAfterAuth(result.user?.role);
-          else setError(result.error || 'Google sign-in failed.');
-        } catch {
-          setError('Could not fetch your Google profile. Try again.');
-        }
-      },
-    });
-    client.requestAccessToken();
+    setGoogleBusy(true);
+    void (async () => {
+      const outcome = await signInWithGoogle();
+      if (!outcome.ok) {
+        setGoogleBusy(false);
+        if (outcome.error) setError(outcome.error);
+        return;
+      }
+
+      // Hand the Google-verified identity to the local account store.
+      const result = loginWithGoogle(outcome.name, outcome.email);
+      setGoogleBusy(false);
+      if (result.ok) routeAfterAuth(result.user?.role);
+      else setError(result.error || 'Google sign-in failed.');
+    })();
   };
 
   return (
@@ -169,14 +145,27 @@ export function LoginPage() {
 
           <div className="flex flex-col gap-1.5">
             <label className="font-mono text-[9px] text-slate-400 uppercase tracking-wider" htmlFor="auth-password">Password</label>
-            <input
-              id="auth-password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => { setPassword(e.target.value); resetMessages(); }}
-              className="h-10 px-4 border border-slate-200 text-sm rounded bg-[#F8F9FA]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none"
-            />
+            <div className="relative">
+              <input
+                id="auth-password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => { setPassword(e.target.value); resetMessages(); }}
+                className="w-full h-10 pl-4 pr-11 border border-slate-200 text-sm rounded bg-[#F8F9FA]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-pressed={showPassword}
+                title={showPassword ? 'Hide password' : 'Show password'}
+                className="absolute inset-y-0 right-0 w-11 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors cursor-pointer focus:outline-none"
+                id="auth-password-toggle"
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
 
           {error && <span className="text-[11px] text-red-500 font-mono">{error}</span>}
@@ -205,7 +194,7 @@ export function LoginPage() {
         <button
           type="button"
           onClick={handleGoogle}
-          disabled={!googleReady}
+          disabled={!googleReady || googleBusy}
           title={googleReady ? undefined : 'Google sign-in is not configured yet.'}
           className="h-10 rounded border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-center gap-3 text-sm font-medium text-slate-700 cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed disabled:hover:bg-white"
           id="auth-google-btn"
@@ -216,12 +205,12 @@ export function LoginPage() {
             <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84z" />
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z" />
           </svg>
-          Continue with Google
+          {googleBusy ? 'Opening Google…' : 'Continue with Google'}
         </button>
 
         {!googleReady && (
           <p className="font-mono text-[9px] text-slate-400 text-center leading-relaxed">
-            Google sign-in needs a Client ID in <span className="text-slate-500">AuthContext.tsx</span>.
+            Google sign-in needs the Firebase config in <span className="text-slate-500">.env</span>.
           </p>
         )}
 

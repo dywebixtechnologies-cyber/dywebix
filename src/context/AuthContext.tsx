@@ -17,16 +17,10 @@ export interface AuthUser {
 const ADMIN_EMAIL = 'admin@dywebix.com';
 const ADMIN_PASSWORD = 'admin@dywebix';
 
-// 🔑 GOOGLE OAUTH — the "Continue with Google" button is real OAuth only, and
-// stays disabled until a Client ID is supplied. Set VITE_GOOGLE_CLIENT_ID in a
-// .env file (preferred, keeps it out of git) or paste it into the fallback below.
-// It looks like: 1234567890-abc123.apps.googleusercontent.com
-// Create one at https://console.cloud.google.com/apis/credentials
-//   → "Create credentials" → "OAuth client ID" → Web application
-//   → Authorized JavaScript origins: http://localhost:3000 (and your live domain)
-// Vite only reads .env at startup, so restart `npm run dev` after changing it.
-export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? '';
-export const isGoogleConfigured = () => GOOGLE_CLIENT_ID.trim().length > 0;
+// 🔑 GOOGLE SIGN-IN — handled by Firebase Auth (see src/lib/googleAuth.ts), so
+// this app holds no Google Client ID of its own. Setup is entirely in the
+// console: Authentication → Sign-in method → enable Google, and make sure the
+// site's domain is listed under Authorized domains.
 
 const CURRENT_KEY = 'dywebix-current-user';
 const USERS_KEY = 'dywebix-users';

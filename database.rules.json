@@ -1,0 +1,24 @@
+{
+  "comment": [
+    "Realtime Database rules for the dywebixtech inquiry inbox.",
+    "",
+    "This site has no server-side auth — the admin login is a client-side",
+    "constant — so these rules cannot distinguish an admin from a visitor.",
+    "They are deliberately permissive and are NOT a security boundary: treat",
+    "everything under /inquiries as public data.",
+    "",
+    "Paste into console.firebase.google.com -> Realtime Database -> Rules,",
+    "or deploy with: firebase deploy --only database"
+  ],
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "inquiries": {
+      ".read": true,
+      ".write": true,
+      "$inquiryId": {
+        ".validate": "newData.hasChildren(['id', 'name', 'email', 'timestamp'])"
+      }
+    }
+  }
+}
