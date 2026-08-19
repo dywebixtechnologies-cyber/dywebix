@@ -3,16 +3,25 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useRef, Suspense, lazy } from 'react';
+import { motion, AnimatePresence, useInView } from 'motion/react';
 import { PROJECTS } from '../data/portfolioData';
 import { Project } from '../types';
-import { ExternalLink, CheckCircle, Info, ChevronRight, Laptop, Monitor, Smartphone, LayoutGrid, FileCode2 } from 'lucide-react';
+import { ExternalLink, CheckCircle, Info, ChevronRight, Laptop, Monitor, Smartphone, LayoutGrid, FileCode2, MousePointer2 } from 'lucide-react';
+import { Loader } from './Loader';
+import logoSrc from '../assets/dywebix-logo.png';
+
+// The R3F/rapier bundle is heavy, so the ID card is code-split and only mounted
+// once the portfolio section actually scrolls into view.
+const Lanyard = lazy(() => import('./Lanyard'));
+
 
 export function Portfolio() {
   const [filter, setFilter] = useState<string>('all');
   const [selectedProject, setSelectedProject] = useState<Project | null>(PROJECTS[0]);
   const [viewMode, setViewMode] = useState<'preview' | 'specs'>('preview');
+  const cardRef = useRef<HTMLDivElement>(null);
+  const cardInView = useInView(cardRef, { once: true, margin: '200px' });
 
   const categories = [
     { id: 'all', label: 'All Artifacts' },
@@ -285,6 +294,50 @@ export function Portfolio() {
             )}
           </div>
 
+        </div>
+
+        {/* Interactive 3D studio ID card */}
+        <div className="mt-20 pt-12 border-t border-slate-200 grid lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-5">
+            <span className="font-mono text-[10px] text-slate-400 uppercase tracking-widest block mb-3">
+              [ 03 / STUDIO CREDENTIAL ]
+            </span>
+            <h3 className="font-display font-light text-2xl md:text-4xl tracking-tight text-slate-950 leading-tight">
+              The team behind the <span className="font-serif italic font-normal text-slate-500">artifacts</span>.
+            </h3>
+            <p className="mt-5 text-slate-500 text-sm leading-relaxed font-light max-w-md">
+              Every project above was engineered by hand. Grab the badge and throw it around — it is
+              real physics, rendered live in your browser at sixty frames a second.
+            </p>
+            <span className="mt-6 flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-slate-400">
+              <MousePointer2 className="w-3 h-3" /> Drag the card
+            </span>
+          </div>
+
+          <div
+            ref={cardRef}
+            className="lg:col-span-7 relative w-full rounded-2xl overflow-hidden bg-[radial-gradient(ellipse_at_top,#eef2ff_0%,transparent_70%)]"
+            style={{ height: 600, minHeight: 600 }}
+          >
+            {cardInView && (
+              <Suspense
+                fallback={
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Loader size={80} label="Loading the ID card" />
+                  </div>
+                }
+              >
+                <Lanyard
+                  position={[0, 0, 18]}
+                  gravity={[0, -40, 0]}
+                  frontImage={logoSrc}
+                  backImage={logoSrc}
+                  imageFit="contain"
+                  imageBackground="#ffffff"
+                />
+              </Suspense>
+            )}
+          </div>
         </div>
 
       </div>
