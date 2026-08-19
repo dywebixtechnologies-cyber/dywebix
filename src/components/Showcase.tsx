@@ -45,7 +45,7 @@ export function Showcase() {
           transition={{ duration: 0.6 }}
         >
           <span className="font-mono text-[10px] text-slate-400 uppercase tracking-widest block mb-3">
-            [ WHY KRAFT // WEB ]
+            [ WHY DYWEBIXTECH ]
           </span>
           <h2 className="font-display font-light text-3xl md:text-5xl tracking-tight text-slate-950 leading-[1.1]">
             Three pillars behind <span className="font-serif italic font-normal text-slate-500">every build</span>.
@@ -86,7 +86,7 @@ export function Showcase() {
                   <p className="mt-3 text-sm text-white/60 font-light leading-relaxed">{c.text}</p>
                 </div>
                 <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-white/70">
-                  KRAFT // WEB <ArrowUpRight className="w-3.5 h-3.5" />
+                  dywebixtech <ArrowUpRight className="w-3.5 h-3.5" />
                 </div>
               </Card>
             ))}

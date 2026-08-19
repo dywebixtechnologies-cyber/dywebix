@@ -5,7 +5,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { Layers, LogOut, ArrowLeft, ArrowRight, FolderKanban, CheckCircle2, Clock, Hourglass, IndianRupee, Plus, Sparkles } from 'lucide-react';
+import { LogOut, ArrowLeft, ArrowRight, FolderKanban, CheckCircle2, Clock, Hourglass, IndianRupee, Plus, Sparkles } from 'lucide-react';
+import { Logo } from './Logo';
 import { useAuth } from '../context/AuthContext';
 import { Inquiry } from '../types';
 
@@ -65,11 +66,9 @@ export function UserDashboard() {
       <header className="sticky top-0 z-40 bg-[#F8F9FA]/90 backdrop-blur-md border-b border-slate-200/60">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5 text-slate-900">
-            <div className="w-8 h-8 flex items-center justify-center bg-black rounded-sm text-white">
-              <Layers className="w-4.5 h-4.5" />
-            </div>
+            <Logo size={32} />
             <div className="leading-none">
-              <span className="font-mono text-[8px] tracking-widest uppercase block text-slate-400 font-semibold">KRAFT // WEB</span>
+              <span className="font-mono text-[8px] tracking-widest uppercase block text-slate-400 font-semibold">dywebixtech</span>
               <span className="font-display font-medium text-sm tracking-tight block">My Dashboard</span>
             </div>
           </div>

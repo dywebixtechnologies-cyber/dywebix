@@ -5,7 +5,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { LogIn, UserPlus, ArrowLeft, Layers, ShieldCheck } from 'lucide-react';
+import { LogIn, UserPlus, ArrowLeft, ShieldCheck } from 'lucide-react';
+import { Logo } from './Logo';
 import { useAuth, GOOGLE_CLIENT_ID, isGoogleConfigured } from '../context/AuthContext';
 
 // Google Identity Services attaches itself to window.google once its script loads.
@@ -29,6 +30,9 @@ export function LoginPage() {
   const [error, setError] = useState('');
 
   const resetMessages = () => setError('');
+
+  // Only a configured Client ID makes the Google button usable.
+  const googleReady = isGoogleConfigured();
 
   // Load the Google Identity Services script once a real Client ID is configured.
   useEffect(() => {
@@ -59,37 +63,38 @@ export function LoginPage() {
   };
 
   const handleGoogle = () => {
-    // Real Google OAuth (when a Client ID is configured): request an access token,
-    // fetch the verified profile, then sign the user in / auto-register them.
-    if (isGoogleConfigured() && window.google?.accounts?.oauth2) {
-      const client = window.google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope: 'openid email profile',
-        callback: async (resp: { access_token?: string; error?: string }) => {
-          if (resp.error || !resp.access_token) {
-            setError('Google sign-in was cancelled.');
-            return;
-          }
-          try {
-            const info = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-              headers: { Authorization: `Bearer ${resp.access_token}` },
-            }).then((r) => r.json());
-            const result = loginWithGoogle(info.name, info.email);
-            if (result.ok) routeAfterAuth(result.user?.role);
-            else setError(result.error || 'Google sign-in failed.');
-          } catch {
-            setError('Could not fetch your Google profile. Try again.');
-          }
-        },
-      });
-      client.requestAccessToken();
+    // Google sign-in is real OAuth only. With no Client ID (or before the GSI
+    // script has loaded) there is nothing to fall back to, so say so plainly.
+    if (!isGoogleConfigured()) {
+      setError('Google sign-in is not configured yet. Use your email and password.');
+      return;
+    }
+    if (!window.google?.accounts?.oauth2) {
+      setError('Google sign-in is still loading. Try again in a moment.');
       return;
     }
 
-    // Fallback demo sign-in (no Client ID configured yet).
-    const result = loginWithGoogle();
-    if (result.ok) routeAfterAuth(result.user?.role);
-    else setError(result.error || 'Google sign-in failed.');
+    const client = window.google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: 'openid email profile',
+      callback: async (resp: { access_token?: string; error?: string }) => {
+        if (resp.error || !resp.access_token) {
+          setError('Google sign-in was cancelled.');
+          return;
+        }
+        try {
+          const info = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { Authorization: `Bearer ${resp.access_token}` },
+          }).then((r) => r.json());
+          const result = loginWithGoogle(info.name, info.email);
+          if (result.ok) routeAfterAuth(result.user?.role);
+          else setError(result.error || 'Google sign-in failed.');
+        } catch {
+          setError('Could not fetch your Google profile. Try again.');
+        }
+      },
+    });
+    client.requestAccessToken();
   };
 
   return (
@@ -102,15 +107,13 @@ export function LoginPage() {
       >
         {/* Brand */}
         <div className="flex flex-col items-center gap-2 text-center">
-          <div className="w-10 h-10 rounded-sm bg-black flex items-center justify-center text-white">
-            <Layers className="w-4.5 h-4.5" />
-          </div>
+          <Logo size={40} />
           <div>
             <h1 className="font-display font-semibold text-lg tracking-tight text-slate-950">
               {mode === 'login' ? 'Welcome back' : 'Create your account'}
             </h1>
             <p className="font-mono text-[9px] uppercase tracking-widest text-slate-400 mt-0.5">
-              KRAFT // WEB Account
+              dywebixtech Account
             </p>
           </div>
         </div>
@@ -198,11 +201,13 @@ export function LoginPage() {
           <span className="flex-1 h-px bg-slate-200" />
         </div>
 
-        {/* Continue with Google — sits below the Log in button */}
+        {/* Continue with Google — real OAuth only, disabled until a Client ID exists */}
         <button
           type="button"
           onClick={handleGoogle}
-          className="h-10 rounded border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-center gap-3 text-sm font-medium text-slate-700 cursor-pointer"
+          disabled={!googleReady}
+          title={googleReady ? undefined : 'Google sign-in is not configured yet.'}
+          className="h-10 rounded border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-center gap-3 text-sm font-medium text-slate-700 cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed disabled:hover:bg-white"
           id="auth-google-btn"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
@@ -213,6 +218,12 @@ export function LoginPage() {
           </svg>
           Continue with Google
         </button>
+
+        {!googleReady && (
+          <p className="font-mono text-[9px] text-slate-400 text-center leading-relaxed">
+            Google sign-in needs a Client ID in <span className="text-slate-500">AuthContext.tsx</span>.
+          </p>
+        )}
 
         <p className="font-mono text-[9px] text-slate-400 text-center leading-relaxed flex items-center justify-center gap-1.5">
           <ShieldCheck className="w-3 h-3" /> Studio administrators sign in here too.

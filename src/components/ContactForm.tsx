@@ -7,13 +7,14 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PROJECT_TYPES } from '../data/portfolioData';
 import { Inquiry } from '../types';
-import { CheckCircle2, ChevronRight, FileCheck, HelpCircle, RefreshCw, Send, Sparkles, MessageCircle, LogIn } from 'lucide-react';
+import { CheckCircle2, ChevronRight, FileCheck, HelpCircle, Send, Sparkles, MessageCircle, LogIn } from 'lucide-react';
+import { Loader } from './Loader';
 import { useAuth } from '../context/AuthContext';
 
 // Studio WhatsApp contact (India, +91). Shown once a client has shared an idea.
 const WHATSAPP_NUMBER = '917397075166';
 const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-  "Hi! I just submitted a project idea on KRAFT // WEB and would like to discuss it."
+  "Hi! I just submitted a project idea on dywebixtech and would like to discuss it."
 )}`;
 
 interface ContactFormProps {
@@ -316,7 +317,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                   >
                     {isSubmitting ? (
                       <>
-                        <RefreshCw className="w-4 h-4 animate-spin" /> COMPILING DESIGN SPECIFICATION...
+                        <Loader size={18} color="#ffffff" label="Submitting" /> COMPILING DESIGN SPECIFICATION...
                       </>
                     ) : (
                       <>
@@ -416,7 +417,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
               <div className="border-t border-slate-900 pt-4 mt-6 flex items-center gap-2">
                 <Sparkles className="w-3.5 h-3.5 text-slate-500" />
                 <span className="text-[10px] text-slate-600 leading-none">
-                  KRAFT Architecture Engine v4.1 (Standard Caching)
+                  dywebixtech Architecture Engine v4.1 (Standard Caching)
                 </span>
               </div>
 

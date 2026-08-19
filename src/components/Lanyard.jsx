@@ -36,6 +36,7 @@ export default function Lanyard({
   frontImage = null,
   backImage = null,
   imageFit = 'cover',
+  imageBackground = null,
   lanyardImage = null,
   lanyardWidth = 1
 }) {
@@ -63,6 +64,7 @@ export default function Lanyard({
             frontImage={frontImage}
             backImage={backImage}
             imageFit={imageFit}
+            imageBackground={imageBackground}
             lanyardImage={lanyardImage}
             lanyardWidth={lanyardWidth}
           />
@@ -109,6 +111,7 @@ function Band({
   frontImage = null,
   backImage = null,
   imageFit = 'cover',
+  imageBackground = null,
   lanyardImage = null,
   lanyardWidth = 1
 }) {
@@ -162,6 +165,10 @@ function Band({
       ctx.beginPath();
       ctx.rect(rx, ry, rw, rh);
       ctx.clip();
+      if (imageBackground) {
+        ctx.fillStyle = imageBackground;
+        ctx.fillRect(rx, ry, rw, rh);
+      }
       ctx.drawImage(img, dx, dy, dw, dh);
       ctx.restore();
     };
@@ -175,7 +182,7 @@ function Band({
     composite.anisotropy = 16;
     composite.needsUpdate = true;
     return composite;
-  }, [frontImage, backImage, imageFit, frontTex, backTex, materials.base.map]);
+  }, [frontImage, backImage, imageFit, imageBackground, frontTex, backTex, materials.base.map]);
   const [curve] = useState(
     () =>
       new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])

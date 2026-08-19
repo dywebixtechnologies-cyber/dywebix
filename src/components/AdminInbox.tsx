@@ -499,7 +499,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                     </div>
 
                     <a
-                      href={`mailto:${selectedInquiry.email}?subject=Kraft Web Service Quote Receipt #${selectedInquiry.id}`}
+                      href={`mailto:${selectedInquiry.email}?subject=dywebixtech Service Quote Receipt #${selectedInquiry.id}`}
                       className="rounded bg-black hover:bg-slate-905 text-white text-xs font-mono tracking-widest uppercase py-3.5 px-6 flex items-center justify-center gap-2 cursor-pointer transition-all"
                       id="inq-reply-email-btn"
                     >

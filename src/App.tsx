@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { PageLoader } from './components/Loader';
 import { motion, AnimatePresence } from 'motion/react';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
@@ -20,7 +21,8 @@ import { useAuth } from './context/AuthContext';
 // when a visitor actually opens the About page — keeps the rest of the site fast.
 const AboutUs = lazy(() => import('./components/AboutUs').then((m) => ({ default: m.AboutUs })));
 import { Inquiry } from './types';
-import { Layers, Mail, Terminal, Clock, Star, Monitor, ShieldCheck, Heart } from 'lucide-react';
+import { Mail, Terminal, Clock, Star, Monitor, ShieldCheck, Heart } from 'lucide-react';
+import { Logo } from './components/Logo';
 
 export default function App() {
   const { user } = useAuth();
@@ -122,9 +124,9 @@ export default function App() {
     view = <AdminGate unreadCount={unreadCount} onInquiryCountChange={calculateUnreadCount} />;
     viewKey = 'admin';
   } else if (route === '#about') {
-    // About Us page (features the interactive 3D lanyard) — lazy-loaded.
+    // About Us page — lazy-loaded.
     view = (
-      <Suspense fallback={<div className="min-h-screen bg-[#F8F9FA]" />}>
+      <Suspense fallback={<PageLoader />}>
         <AboutUs />
       </Suspense>
     );
@@ -180,10 +182,10 @@ export default function App() {
           {/* Logo Brand Descriptor (Columns 1-4) */}
           <div className="md:col-span-4 space-y-4">
             <div className="flex items-center gap-2 text-stone-100">
-              <div className="w-8 h-8 flex items-center justify-center bg-stone-150 rounded-sm text-stone-950">
-                <Layers className="w-4.5 h-4.5" />
+              <div className="w-8 h-8 flex items-center justify-center bg-white rounded-sm">
+                <Logo size={30} />
               </div>
-              <span className="font-sans font-bold text-lg tracking-tight">KRAFT // WEB</span>
+              <span className="font-sans font-bold text-lg tracking-tight">dywebixtech</span>
             </div>
             <p className="font-sans text-xs text-stone-500 leading-relaxed font-light max-w-sm">
               An engineering-forward studio dedicated to building high-performance, minimalist web interfaces. Handcrafted logic, clean frameworks, maximum conversions.
@@ -252,7 +254,7 @@ export default function App() {
 
         {/* Copyright Panel */}
         <div className="max-w-7xl mx-auto pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-600">
-          <p>© {new Date().getFullYear()} KRAFT // Development Web Studio. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} dywebixtech. All rights reserved.</p>
           <div className="flex items-center gap-1.5 font-light">
             <span>Made with precision by a</span>
             <Heart className="w-3.5 h-3.5 text-stone-500 hover:text-stone-200 transition-colors duration-200 scale-100 hover:scale-110 cursor-pointer" />

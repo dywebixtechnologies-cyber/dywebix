@@ -5,7 +5,8 @@
 
 import React from 'react';
 import { motion } from 'motion/react';
-import { Lock, LogOut, ArrowLeft, Layers, LogIn } from 'lucide-react';
+import { Lock, LogOut, ArrowLeft, LogIn } from 'lucide-react';
+import { Logo } from './Logo';
 import { AdminInbox } from './AdminInbox';
 import { useAuth } from '../context/AuthContext';
 
@@ -70,11 +71,9 @@ export function AdminGate({ unreadCount, onInquiryCountChange }: AdminGateProps)
       <header className="sticky top-0 z-40 bg-[#F8F9FA]/90 backdrop-blur-md border-b border-slate-200/60">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5 text-slate-900">
-            <div className="w-8 h-8 flex items-center justify-center bg-black rounded-sm text-white">
-              <Layers className="w-4.5 h-4.5" />
-            </div>
+            <Logo size={32} />
             <div className="leading-none">
-              <span className="font-mono text-[8px] tracking-widest uppercase block text-slate-400 font-semibold">KRAFT // WEB</span>
+              <span className="font-mono text-[8px] tracking-widest uppercase block text-slate-400 font-semibold">dywebixtech</span>
               <span className="font-display font-medium text-sm tracking-tight block">Admin Dashboard</span>
             </div>
           </div>
