@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowDownRight, Globe, Shield, Zap, MonitorSmartphone } from 'lucide-react';
+import { ArrowDownRight, Shield, Zap, MonitorSmartphone } from 'lucide-react';
 import MagicRings from './MagicRings';
 
 interface HeroProps {
@@ -14,7 +14,7 @@ interface HeroProps {
 
 export function Hero({ onSectionChange }: HeroProps) {
   return (
-    <section className="relative min-h-screen pt-32 pb-20 px-6 flex flex-col justify-between overflow-hidden bg-[#F8F9FA]">
+    <section className="relative min-h-screen min-h-[100svh] pt-28 sm:pt-32 pb-16 sm:pb-20 px-6 flex flex-col justify-between overflow-hidden bg-[#F8F9FA]">
       {/* Animated WebGL magic-rings background */}
       <div className="absolute inset-0 z-0 pointer-events-none [mask-image:radial-gradient(ellipse_72%_72%_at_50%_45%,#000_52%,transparent_88%)]">
         <MagicRings

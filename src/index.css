@@ -19,3 +19,32 @@ html {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
+
+/* ── Mobile hardening ──────────────────────────────────────────────────────
+   Sections use large negative-space layouts and a few absolutely-positioned
+   decorations, any one of which can push the viewport wider than the screen on
+   a phone. Clamp it at the root so a stray element can never cause the whole
+   page to scroll sideways. */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Stop iOS Safari zooming the page when a form field is focused: it does that
+   whenever the input's font-size is under 16px, which several of ours are. */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Respect the notch / rounded corners on modern phones. */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}

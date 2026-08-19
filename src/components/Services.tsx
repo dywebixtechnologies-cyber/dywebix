@@ -6,7 +6,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { SERVICES } from '../data/portfolioData';
-import { Sparkles, Cpu, ShoppingBag, Layout, Clock, Check, ArrowRight } from 'lucide-react';
+import { Sparkles, Cpu, ShoppingBag, Layout, Check, ArrowRight } from 'lucide-react';
 
 interface ServicesProps {
   onSelectService: (serviceName: string) => void;

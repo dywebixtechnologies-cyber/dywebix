@@ -21,8 +21,7 @@ import { useAuth } from './context/AuthContext';
 // Lazy-loaded so the heavy 3D libraries (three/R3F/drei/rapier) only download
 // when a visitor actually opens the About page — keeps the rest of the site fast.
 const AboutUs = lazy(() => import('./components/AboutUs').then((m) => ({ default: m.AboutUs })));
-import { Inquiry } from './types';
-import { Mail, Terminal, Clock, Star, Monitor, ShieldCheck, Heart } from 'lucide-react';
+import { Clock, Monitor, ShieldCheck, Heart } from 'lucide-react';
 import { Logo } from './components/Logo';
 
 export default function App() {

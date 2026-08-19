@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PROJECT_TYPES } from '../data/portfolioData';
 import { Inquiry } from '../types';
-import { CheckCircle2, ChevronRight, FileCheck, HelpCircle, Send, Sparkles, MessageCircle, LogIn } from 'lucide-react';
+import { CheckCircle2, FileCheck, Send, Sparkles, MessageCircle, LogIn } from 'lucide-react';
 import { Loader } from './Loader';
 import { createInquiry, listInquiries, listInquiriesFor } from '../lib/inquiries';
 import { useAuth } from '../context/AuthContext';
@@ -240,7 +240,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                           placeholder="e.g. sarah@example.com"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className={`h-11 px-4 border text-sm rounded bg-[#F8F9FA]/40 focus:bg-white transition-colors focus:border-slate-955 focus:outline-none ${
+                          className={`h-11 px-4 border text-sm rounded bg-[#F8F9FA]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none ${
                             errors.email ? 'border-red-500' : 'border-slate-200'
                           }`}
                         />
@@ -357,7 +357,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
 
                   <button
                     onClick={() => setSubmissionReceipt(null)}
-                    className="mt-4 flex items-center gap-2 font-mono text-xs text-slate-500 hover:text-black font-semibold border-b border-slate-350 pb-0.5 cursor-pointer"
+                    className="mt-4 flex items-center gap-2 font-mono text-xs text-slate-500 hover:text-black font-semibold border-b border-slate-300 pb-0.5 cursor-pointer"
                     id="submit-another-brief-btn"
                   >
                     Log another system blueprint

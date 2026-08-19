@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Inquiry } from '../types';
-import { Trash2, CheckCircle, Mail, MessageSquare, BookOpen, IndianRupee, Search, PlusCircle, LayoutGrid, CheckSquare, BarChart, ArrowRight, Users } from 'lucide-react';
+import { Trash2, CheckCircle, Mail, MessageSquare, BookOpen, IndianRupee, Search, CheckSquare, ArrowRight, Users } from 'lucide-react';
 import { getRegisteredUserCount } from '../context/AuthContext';
 import { deleteInquiry, listInquiries, updateInquiry } from '../lib/inquiries';
 
@@ -131,7 +131,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
   );
 
   return (
-    <section id="admin-section" className="py-24 px-6 bg-[#F8F9FA] border-t border-slate-205">
+    <section id="admin-section" className="py-24 px-6 bg-[#F8F9FA] border-t border-slate-200">
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
@@ -346,7 +346,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                   </div>
 
                   {/* Logistics Specs Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#F8F9FA] p-4 rounded border border-slate-205 font-mono text-xs text-slate-650">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#F8F9FA] p-4 rounded border border-slate-200 font-mono text-xs text-slate-600">
                     <div className="space-y-1.5">
                       <span className="text-[9px] text-slate-400 block uppercase tracking-wider">Scope Architecture</span>
                       <span className="text-slate-900 font-medium block">{selectedInquiry.projectType}</span>
@@ -429,7 +429,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                       )}
                       <button
                         onClick={(e) => handleToggleRead(selectedInquiry.id, e)}
-                        className="flex items-center gap-1.5 border border-slate-250 rounded px-4 py-2 hover:bg-slate-50 font-mono text-xs text-slate-600 transition-all cursor-pointer"
+                        className="flex items-center gap-1.5 border border-slate-200 rounded px-4 py-2 hover:bg-slate-50 font-mono text-xs text-slate-600 transition-all cursor-pointer"
                         id="inq-read-toggle-btn-pane"
                       >
                         <CheckSquare className="w-4 h-4 text-slate-400" />
@@ -437,7 +437,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                       </button>
                       <button
                         onClick={(e) => handleDelete(selectedInquiry.id, e)}
-                        className="flex items-center gap-1.5 border border-slate-250 hover:border-red-400 hover:text-red-500 hover:bg-red-50/10 rounded px-4 py-2 font-mono text-xs text-slate-600 transition-all cursor-pointer"
+                        className="flex items-center gap-1.5 border border-slate-200 hover:border-red-400 hover:text-red-500 hover:bg-red-50/10 rounded px-4 py-2 font-mono text-xs text-slate-600 transition-all cursor-pointer"
                         id="inq-delete-btn-pane"
                       >
                         <Trash2 className="w-4 h-4 text-slate-400 group-hover:text-red-500" />
@@ -447,7 +447,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
 
                     <a
                       href={`mailto:${selectedInquiry.email}?subject=dywebixtech Service Quote Receipt #${selectedInquiry.id}`}
-                      className="rounded bg-black hover:bg-slate-905 text-white text-xs font-mono tracking-widest uppercase py-3.5 px-6 flex items-center justify-center gap-2 cursor-pointer transition-all"
+                      className="rounded bg-black hover:bg-slate-900 text-white text-xs font-mono tracking-widest uppercase py-3.5 px-6 flex items-center justify-center gap-2 cursor-pointer transition-all"
                       id="inq-reply-email-btn"
                     >
                       Draft Reply Message <ArrowRight className="w-3.5 h-3.5" />

@@ -142,7 +142,7 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
         {/* Mobile Nav Toggle */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 text-slate-700 hover:text-black focus:outline-none"
+          className="md:hidden -mr-2 w-11 h-11 flex items-center justify-center text-slate-700 hover:text-black focus:outline-none"
           aria-label="Toggle Menu"
           id="nav-mobile-toggle"
         >

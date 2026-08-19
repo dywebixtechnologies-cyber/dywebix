@@ -83,7 +83,7 @@ export function UserDashboard() {
             </a>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 border border-slate-250 rounded px-3 py-1.5 hover:bg-slate-100 font-mono text-[10px] uppercase tracking-widest text-slate-600 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 border border-slate-200 rounded px-3 py-1.5 hover:bg-slate-100 font-mono text-[10px] uppercase tracking-widest text-slate-600 transition-all cursor-pointer"
               id="user-logout-btn"
             >
               <LogOut className="w-3.5 h-3.5" /> Log out

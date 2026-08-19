@@ -7,7 +7,7 @@ import React, { useState, useRef, Suspense, lazy } from 'react';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import { PROJECTS } from '../data/portfolioData';
 import { Project } from '../types';
-import { ExternalLink, CheckCircle, Info, ChevronRight, Laptop, Monitor, Smartphone, LayoutGrid, FileCode2, MousePointer2 } from 'lucide-react';
+import { CheckCircle, Info, ChevronRight, Laptop, FileCode2, MousePointer2 } from 'lucide-react';
 import { Loader } from './Loader';
 import logoSrc from '../assets/dywebix-logo.png';
 
@@ -59,15 +59,16 @@ export function Portfolio() {
           </p>
         </div>
 
-        {/* Filter Navigation */}
-        <div className="flex flex-wrap items-center gap-2 mb-10 pb-4 border-b border-slate-200/60">
+        {/* Filter Navigation — scrolls horizontally on a phone rather than wrapping
+            into three cramped rows. */}
+        <div className="flex sm:flex-wrap items-center gap-2 mb-10 pb-4 border-b border-slate-200/60 overflow-x-auto sm:overflow-x-visible -mx-6 px-6 sm:mx-0 sm:px-0">
           {categories.map((cat) => {
             const isActive = filter === cat.id;
             return (
               <button
                 key={cat.id}
                 onClick={() => setFilter(cat.id)}
-                className={`relative px-4 py-2 font-mono text-[10px] uppercase tracking-wider rounded-sm transition-all focus:outline-none cursor-pointer ${
+                className={`relative shrink-0 px-4 py-2.5 font-mono text-[10px] uppercase tracking-wider rounded-sm transition-all focus:outline-none cursor-pointer ${
                   isActive ? 'text-white font-medium' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100/55'
                 }`}
                 id={`filter-btn-${cat.id}`}
@@ -158,9 +159,9 @@ export function Portfolio() {
                 {/* Simulated Interactive Title Bar */}
                 <div className="bg-[#F8F9FA] border-b border-slate-200 px-4 py-3 flex items-center justify-between">
                   <div className="flex items-center gap-1.5 opacity-60">
-                    <span className="w-2.5 h-2.5 rounded-full bg-slate-350" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-slate-205" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-slate-205" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
                   </div>
 
                   {/* Toggle Preview vs Spec view tabs */}
@@ -224,7 +225,7 @@ export function Portfolio() {
                         </div>
 
                         {/* Interactive Stats Grid */}
-                        <div className="bg-black grid grid-cols-3 divide-x divide-slate-800 p-4">
+                        <div className="bg-black grid grid-cols-3 divide-x divide-slate-800 p-3 sm:p-4">
                           {selectedProject.stats.map((stat, sIdx) => (
                             <div key={sIdx} className="px-4 text-center first:pl-0 last:pr-0">
                               <span className="font-sans font-bold text-lg md:text-xl text-white tracking-tight">{stat.value}</span>
@@ -275,8 +276,8 @@ export function Portfolio() {
                           </div>
 
                           <div className="bg-slate-900 rounded border border-slate-800 p-4 mt-4 flex items-start gap-3">
-                            <Info className="w-4 h-4 text-slate-450 mt-0.5 shrink-0" />
-                            <div className="text-[11px] leading-relaxed text-slate-450">
+                            <Info className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
+                            <div className="text-[11px] leading-relaxed text-slate-400">
                               This artifact demonstrates fully pre-rendered index pages, responsive view containers, fluid layouts, and complete component safety under high load metrics.
                             </div>
                           </div>
@@ -288,7 +289,7 @@ export function Portfolio() {
 
               </div>
             ) : (
-              <div className="border border-dashed border-slate-200 p-12 text-center rounded text-slate-450 text-xs">
+              <div className="border border-dashed border-slate-200 p-12 text-center rounded text-slate-400 text-xs">
                 Choose a project on the left to see specs.
               </div>
             )}
@@ -310,14 +311,15 @@ export function Portfolio() {
               real physics, rendered live in your browser at sixty frames a second.
             </p>
             <span className="mt-6 flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-slate-400">
-              <MousePointer2 className="w-3 h-3" /> Drag the card
+              <MousePointer2 className="w-3 h-3" />
+              <span className="sm:hidden">Swipe the card</span>
+              <span className="hidden sm:inline">Drag the card</span>
             </span>
           </div>
 
           <div
             ref={cardRef}
-            className="lg:col-span-7 relative w-full rounded-2xl overflow-hidden bg-[radial-gradient(ellipse_at_top,#eef2ff_0%,transparent_70%)]"
-            style={{ height: 600, minHeight: 600 }}
+            className="lg:col-span-7 relative w-full h-[360px] sm:h-[460px] lg:h-[600px] rounded-2xl overflow-hidden bg-[radial-gradient(ellipse_at_top,#eef2ff_0%,transparent_70%)]"
           >
             {cardInView && (
               <Suspense
