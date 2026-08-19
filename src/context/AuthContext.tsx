@@ -14,21 +14,54 @@ export interface AuthUser {
 // ⚠️ ADMIN ACCOUNT — these are the ONLY credentials that unlock the admin dashboard.
 // Change them to your own. (This is a static client-side site, so the values live in
 // the front-end bundle — fine to deter casual visitors, not bank-grade security.)
-const ADMIN_EMAIL = 'admin@kraft.com';
-const ADMIN_PASSWORD = 'admin@kraft';
+const ADMIN_EMAIL = 'admin@dywebix.com';
+const ADMIN_PASSWORD = 'admin@dywebix';
 
-// 🔑 GOOGLE OAUTH — paste your Google OAuth Client ID here to enable real
-// "Continue with Google" sign-in. It looks like:
-//   1234567890-abc123.apps.googleusercontent.com
+// 🔑 GOOGLE OAUTH — the "Continue with Google" button is real OAuth only, and
+// stays disabled until a Client ID is supplied. Set VITE_GOOGLE_CLIENT_ID in a
+// .env file (preferred, keeps it out of git) or paste it into the fallback below.
+// It looks like: 1234567890-abc123.apps.googleusercontent.com
 // Create one at https://console.cloud.google.com/apis/credentials
 //   → "Create credentials" → "OAuth client ID" → Web application
 //   → Authorized JavaScript origins: http://localhost:3000 (and your live domain)
-// While this is empty, the button falls back to a demo sign-in.
-export const GOOGLE_CLIENT_ID = '';
+// Vite only reads .env at startup, so restart `npm run dev` after changing it.
+export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? '';
 export const isGoogleConfigured = () => GOOGLE_CLIENT_ID.trim().length > 0;
 
-const CURRENT_KEY = 'kraft-current-user';
-const USERS_KEY = 'kraft-users';
+const CURRENT_KEY = 'dywebix-current-user';
+const USERS_KEY = 'dywebix-users';
+
+// Accounts saved under earlier key names are deleted outright rather than
+// migrated — the studio admin below is meant to be the only account that
+// exists until someone signs up again. Runs once, at import time, before the
+// provider reads the current session.
+const LEGACY_KEYS = [
+  'kraft-users',
+  'kraft-current-user',
+  'dywebixtech-users',
+  'dywebixtech-current-user',
+];
+// The stand-in identity the old demo Google button used to create.
+const DEMO_GOOGLE_EMAIL = 'google.user@gmail.com';
+
+try {
+  LEGACY_KEYS.forEach((key) => localStorage.removeItem(key));
+
+  // Drop the demo Google account if it was created before real OAuth was required.
+  const stored = localStorage.getItem('dywebix-users');
+  if (stored) {
+    const kept = (JSON.parse(stored) as { email: string }[]).filter(
+      (u) => u.email.toLowerCase() !== DEMO_GOOGLE_EMAIL,
+    );
+    localStorage.setItem('dywebix-users', JSON.stringify(kept));
+  }
+  const session = localStorage.getItem('dywebix-current-user');
+  if (session && (JSON.parse(session) as { email?: string }).email?.toLowerCase() === DEMO_GOOGLE_EMAIL) {
+    localStorage.removeItem('dywebix-current-user');
+  }
+} catch {
+  /* ignore */
+}
 
 interface StoredUser {
   name: string;
@@ -140,14 +173,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { ok: true, user: account };
   };
 
-  // Sign in (or auto-register) a Google user. When real OAuth is configured, the
-  // verified name/email from Google are passed in. Otherwise a demo identity is used.
+  // Sign in (or auto-register) a Google user. Only ever called with a name and
+  // email that real Google OAuth verified — there is no demo identity.
   const loginWithGoogle = (name?: string, email?: string): AuthResult => {
-    const googleUser: AuthUser = {
-      name: name?.trim() || 'Google User',
-      email: (email?.trim() || 'google.user@gmail.com').toLowerCase(),
-      role: 'user',
-    };
+    const verifiedName = name?.trim();
+    const verifiedEmail = email?.trim().toLowerCase();
+    if (!verifiedName || !verifiedEmail) {
+      return { ok: false, error: 'Google did not return a verified profile.' };
+    }
+    const googleUser: AuthUser = { name: verifiedName, email: verifiedEmail, role: 'user' };
     if (googleUser.email === ADMIN_EMAIL.toLowerCase()) {
       return { ok: false, error: 'This email is reserved for the studio admin.' };
     }

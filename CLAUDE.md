@@ -17,7 +17,7 @@ There is no test suite and no test runner configured.
 
 ## Architecture
 
-Single-page React 19 + Vite + Tailwind v4 marketing site for a fictional web studio ("KRAFT // WEB"). Everything is client-side — **there is no backend and no database**, despite `express` and `@google/genai` sitting in `package.json` (neither is imported anywhere in `src/`).
+Single-page React 19 + Vite + Tailwind v4 marketing site for a web studio ("dywebixtech"). Everything is client-side — **there is no backend and no database**, despite `express` and `@google/genai` sitting in `package.json` (neither is imported anywhere in `src/`).
 
 ### Routing is hash-based and lives entirely in `src/App.tsx`
 
@@ -29,7 +29,7 @@ Single-page React 19 + Vite + Tailwind v4 marketing site for a fictional web stu
 | `#login` / `#signup` | `LoginPage`, or redirect to the right dashboard if already signed in |
 | `#dashboard` | `UserDashboard` (falls back to `LoginPage`) |
 | `#admin` | `AdminGate` → `AdminInbox`, role-gated inside `AdminGate` |
-| `#about` | `AboutUs`, **lazy-loaded** so three/R3F/drei/rapier are only fetched here |
+| `#about` | `AboutUs`, **lazy-loaded** |
 
 Home-page navigation is not routing: `handleSectionChange` scrolls to `#{section}-section` elements with an 80px sticky-nav offset. Anything that would reach the contact form while logged out redirects to `#login` instead.
 
@@ -38,11 +38,11 @@ Home-page navigation is not routing: `handleSectionChange` scrolls to `#{section
 Two independent stores, both plain JSON in `localStorage`, both read/written directly by components (no repository layer):
 
 - **`inquiries`** — array of `Inquiry` (`src/types.ts`). Written by `ContactForm`, mutated by `AdminInbox` (read/accept/finish/rate/delete), read by `UserDashboard` (filtered by `ownerEmail`) and by `App.calculateUnreadCount` for the nav badge. `AdminInbox` seeds a sample inquiry when the key is absent, which is why `App` defaults `unreadCount` to 1. The full inquiry lifecycle (`read → accepted → finished` + `rate`) lives on this one record shape; revenue totals only count `finished`.
-- **`kraft-users` / `kraft-current-user`** — `src/context/AuthContext.tsx`. `AuthProvider` wraps the app in `main.tsx`; use `useAuth()` for `user`, `isAdmin`, `login`, `signup`, `loginWithGoogle`, `logout`.
+- **`dywebix-users` / `dywebix-current-user`** — `src/context/AuthContext.tsx`. `AuthProvider` wraps the app in `main.tsx`; use `useAuth()` for `user`, `isAdmin`, `login`, `signup`, `loginWithGoogle`, `logout`.
 
 Because there is no server, mutations from a dashboard don't notify other components automatically — `App` passes `calculateUnreadCount` down as `onInquiryCountChange` so writers can trigger a re-count. Follow that pattern rather than adding a store.
 
-Admin credentials are hardcoded constants at the top of `AuthContext.tsx` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`) and ship in the client bundle — deliberate for this static site. `GOOGLE_CLIENT_ID` in the same file is empty; while empty the Google button falls back to a demo identity.
+Admin credentials are hardcoded constants at the top of `AuthContext.tsx` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`) and ship in the client bundle — deliberate for this static site. `GOOGLE_CLIENT_ID` in the same file is empty; the "Continue with Google" button stays disabled until a real Client ID is set — there is no demo/offline identity, and `loginWithGoogle` rejects any call without a verified name and email.
 
 ### 3D / animation components
 
@@ -50,9 +50,14 @@ Three vendored `.jsx` components (React Bits style, intentionally untyped and le
 
 - `MagicRings.jsx` — animated hero background (`Hero.tsx`)
 - `CardSwap.jsx` — GSAP-driven card stack (`Showcase.tsx`); the only GSAP user
-- `Lanyard.jsx` — React Three Fiber + rapier physics badge (`AboutUs.tsx`), imports `card.glb` and `lanyard.png` colocated in `src/components/`
+- `Lanyard.jsx` — React Three Fiber + rapier physics ID card (`Portfolio.tsx`), imports `card.glb` and `lanyard.png` colocated in `src/components/`
 
-`vite.config.ts` sets `assetsInclude: ['**/*.glb']` for that model; `src/global.d.ts` declares `*.glb` and `*.png` modules. Keep `AboutUs` lazy — it is the only entry point to the 3D bundle.
+`vite.config.ts` sets `assetsInclude: ['**/*.glb']` for that model; `src/global.d.ts` declares `*.glb` and `*.png` modules. `Portfolio` is on the eagerly-loaded home page, so it `lazy()`-imports `Lanyard` and only mounts it once a `useInView` gate fires — keep that gate, it is what stops three/R3F/rapier from landing in the main bundle.
+
+### Shared UI primitives
+
+- `Loader.tsx` / `Loader.css` — the one loading animation (three shuffling boxes, adapted from Uiverse). `<Loader size color delay />` for inline use, `<PageLoader />` for full-viewport waits. It is used by `Preloader`, the lazy-route `Suspense` fallback in `App`, the `Lanyard` fallback in `Portfolio`, and the `ContactForm` submit button — add new spinners by composing it, not by forking it.
+- `Logo.tsx` — the dywebixtech logo, from the single lockup PNG in `src/assets/`. `variant="mark"` background-crops the square "dw" glyph out of that one file; `variant="full"` shows the whole lockup. Both use `mix-blend-multiply` to drop the artwork's white plate, so they need a light background behind them (the footer wraps the mark in a white plate for this reason).
 
 ### Styling
 
