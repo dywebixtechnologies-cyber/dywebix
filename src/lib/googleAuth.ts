@@ -50,6 +50,17 @@ export async function signInWithGoogle(): Promise<GoogleSignInResult> {
         error: 'Google sign-in is not enabled for this Firebase project.',
       };
     }
+    // A suspended or deleted API key fails every request with 403. Retrying can
+    // never succeed, so say what actually needs doing instead of "try again".
+    if (code.startsWith('auth/permission-denied') || code === 'auth/api-key-not-valid') {
+      return {
+        ok: false,
+        error: 'The Firebase API key for this app is suspended or invalid. It has to be replaced in the Google Cloud console.',
+      };
+    }
+    if (code === 'auth/network-request-failed') {
+      return { ok: false, error: 'Network error reaching Google. Check your connection.' };
+    }
 
     console.error('Google sign-in failed', err);
     return { ok: false, error: 'Google sign-in failed. Try again.' };
