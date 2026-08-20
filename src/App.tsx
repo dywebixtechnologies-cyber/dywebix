@@ -171,11 +171,10 @@ export default function App() {
           
           {/* Logo Brand Descriptor (Columns 1-4) */}
           <div className="md:col-span-4 space-y-4">
-            <div className="flex items-center gap-2 text-stone-100">
-              <div className="w-8 h-8 flex items-center justify-center bg-white rounded-sm">
-                <Logo size={30} />
+            <div className="flex items-center">
+              <div className="inline-flex items-center bg-white rounded-md px-3 py-2">
+                <Logo variant="full" size={28} />
               </div>
-              <span className="font-sans font-bold text-lg tracking-tight">dywebixtech</span>
             </div>
             <p className="font-sans text-xs text-stone-500 leading-relaxed font-light max-w-sm">
               An engineering-forward studio dedicated to building high-performance, minimalist web interfaces. Handcrafted logic, clean frameworks, maximum conversions.

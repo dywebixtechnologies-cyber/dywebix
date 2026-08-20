@@ -83,13 +83,13 @@ export function LoginPage() {
       >
         {/* Brand */}
         <div className="flex flex-col items-center gap-2 text-center">
-          <Logo size={40} />
+          <Logo variant="full" size={34} />
           <div>
             <h1 className="font-display font-semibold text-lg tracking-tight text-slate-950">
               {mode === 'login' ? 'Welcome back' : 'Create your account'}
             </h1>
             <p className="font-mono text-[9px] uppercase tracking-widest text-slate-400 mt-0.5">
-              dywebixtech Account
+              Account
             </p>
           </div>
         </div>

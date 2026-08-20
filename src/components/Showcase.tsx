@@ -69,7 +69,9 @@ export function Showcase() {
 
         {/* Right: swapping 3D cards */}
         <div className="relative h-[420px] sm:h-[520px] lg:h-[600px]">
-          <CardSwap cardDistance={60} verticalDistance={70} delay={4000} pauseOnHover>
+          {/* easing="power" picks CardSwap's 0.8s tweens; the default elastic
+              ones run 2s and would still be moving when the next swap fires. */}
+          <CardSwap cardDistance={60} verticalDistance={70} delay={2000} easing="power" pauseOnHover>
             {CARDS.map((c) => (
               <Card
                 key={c.tag}

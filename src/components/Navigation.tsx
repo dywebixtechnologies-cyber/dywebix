@@ -56,16 +56,11 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
           className="flex items-center gap-2 group text-slate-900 focus:outline-none"
           id="nav-logo"
         >
-          <div className="relative w-9 h-9 flex items-center justify-center rounded-sm overflow-hidden">
-            <Logo size={34} className="transition-transform duration-300 group-hover:scale-110" />
-            <motion.div 
-              className="absolute inset-0 bg-slate-800 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
-            />
-          </div>
-          <div className="text-left leading-none">
-            <span className="font-mono text-[9px] tracking-widest uppercase block text-slate-400 font-semibold">Development</span>
-            <span className="font-display font-medium text-base tracking-tight block">dywebixtech</span>
-          </div>
+          <Logo
+            variant="full"
+            size={34}
+            className="transition-transform duration-300 group-hover:scale-105"
+          />
         </button>
 
         {/* Desktop Navigation */}

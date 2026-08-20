@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// Firestore rules for the dywebixtech inquiry inbox.
+//
+// This site has no server-side auth — the admin login is a client-side
+// constant — so these rules cannot distinguish an admin from a visitor.
+// They are deliberately permissive and are NOT a security boundary: treat
+// everything in `inquiries` as public data.
+//
+// Paste into console.firebase.google.com -> Firestore -> Rules, or deploy
+// with: firebase deploy --only firestore:rules
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /inquiries/{inquiryId} {
+      // Anyone may submit a brief, and the admin inbox must be able to read
+      // and manage them. Tighten once real (server-verified) auth exists.
+      allow read, write: if true;
+    }
+
+    // Nothing else is reachable.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -22,11 +22,9 @@ export function AboutUs() {
       <header className="sticky top-0 z-40 bg-[#F8F9FA]/90 backdrop-blur-md border-b border-slate-200/60">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <Logo size={32} />
-            <div className="leading-none">
-              <span className="font-mono text-[8px] tracking-widest uppercase block text-slate-400 font-semibold">dywebixtech</span>
-              <span className="font-display font-medium text-sm tracking-tight block">About Us</span>
-            </div>
+            <Logo variant="full" size={30} />
+            <span className="h-6 w-px bg-slate-200" />
+            <span className="font-display font-medium text-sm tracking-tight text-slate-900">About Us</span>
           </div>
           <a href="/" className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-slate-500 hover:text-black transition-colors">
             <ArrowLeft className="w-3 h-3" /> Back to site
