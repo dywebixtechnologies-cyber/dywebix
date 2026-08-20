@@ -21,21 +21,6 @@ import { getDb } from './firebase';
 const COLLECTION = 'inquiries';
 const STORAGE_KEY = 'inquiries';
 
-// Seeded when the store is completely empty, so a fresh admin inbox isn't blank.
-export const SAMPLE_INQUIRY: Inquiry = {
-  id: 'PROJ-1',
-  name: 'Adrian Croft',
-  email: 'adrian@creativeagency.co',
-  company: 'Croft Creative Studio',
-  projectType: 'Creative Agency/Editorial Portfolio',
-  budget: '₹2,50,000 - ₹4,00,000',
-  timeline: 'Standard (3-4 weeks)',
-  details:
-    'We are looking for a highly refined portfolio gallery to showcase our architectural renders. Needs to load within 0.8 seconds and support smooth high-fidelity transitions between pages.',
-  timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
-  read: false,
-};
-
 /* ------------------------------------------------------------------ *
  * localStorage fallback — used verbatim until Firebase is configured.
  * ------------------------------------------------------------------ */
@@ -61,24 +46,13 @@ function writeLocal(list: Inquiry[]) {
  * Public API — always async, so swapping backends never changes callers.
  * ------------------------------------------------------------------ */
 
-/** Newest first. Seeds the sample inquiry when the store is empty. */
+/** Newest first. An empty store stays empty — nothing is seeded. */
 export async function listInquiries(): Promise<Inquiry[]> {
   const db = getDb();
 
-  if (!db) {
-    const local = readLocal();
-    if (local.length === 0) {
-      writeLocal([SAMPLE_INQUIRY]);
-      return [SAMPLE_INQUIRY];
-    }
-    return local;
-  }
+  if (!db) return readLocal();
 
   const snap = await getDocs(query(collection(db, COLLECTION), orderBy('timestamp', 'desc')));
-  if (snap.empty) {
-    await setDoc(doc(db, COLLECTION, SAMPLE_INQUIRY.id), SAMPLE_INQUIRY);
-    return [SAMPLE_INQUIRY];
-  }
   return snap.docs.map((d) => ({ ...(d.data() as Inquiry), id: d.id }));
 }
 
