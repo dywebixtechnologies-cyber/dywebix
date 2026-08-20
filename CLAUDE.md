@@ -46,16 +46,18 @@ Admin credentials are hardcoded constants at the top of `AuthContext.tsx` (`ADMI
 
 ### Inquiry storage
 
-`src/lib/inquiries.ts` is the only module that touches inquiry storage — components call its async API and never read `localStorage` or Firestore themselves. It has two backends behind one interface:
+`src/lib/inquiries.ts` is the only module that touches inquiry storage — components call its async API and never reach the database themselves. Two backends behind one interface:
 
-- **Cloud Firestore** when the `VITE_FIREBASE_*` vars are set (see `.env.example`); `src/lib/firebase.ts` initialises lazily. The project uses a *named* database, so `VITE_FIREBASE_DATABASE_ID` is passed to `getFirestore` — the SDK targets `(default)` otherwise and every read 404s. All config comes from the environment; nothing is committed, because Google suspends API keys it finds in public repositories.
-- **`localStorage`** otherwise, so the site runs with no setup — same behaviour as before the database existed.
+- **Postgres via Supabase** when `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` are set. A browser cannot speak Postgres' wire protocol, so Supabase's HTTP API is what makes a serverless SQL database reachable from a static site. `src/lib/supabase.ts` creates the client lazily.
+- **`localStorage`** otherwise, so the site runs with no setup.
 
-Every function is async in both modes, so adding config never changes a caller. `updateInquiry` maps `undefined` values to `deleteField()` because Firestore rejects undefined outright. The sample inquiry seed lives here (`SAMPLE_INQUIRY`) and is written when the store is empty, which is why the nav badge shows 1 on a fresh install.
+Every function is async in both modes, so adding config never changes a caller. The table is snake_case while `Inquiry` is camelCase, so `toInquiry`/`toRow` map between them — `timestamp` is stored as `created_at` because `timestamp` is a Postgres type name. In `toRow`, `undefined` becomes `null` (clear the column); dropping the key would leave the old value in place.
 
-Writers are `ContactForm` (create) and `AdminInbox` (read/accept/finish/rate/delete — optimistic local state, then a background write that re-syncs from the store if it fails). Readers are `UserDashboard` (`listInquiriesFor(ownerEmail)`) and `App.calculateUnreadCount` (`countUnread`). `subscribeInquiries` exists for live updates but nothing subscribes yet.
+`supabase/schema.sql` holds the table, indexes and RLS policies — run it once in the Supabase SQL Editor. The policies are permissive on purpose: the admin login is a client-side constant, so Postgres has no server-verified identity to key them off. Treat everything in `inquiries` as public data.
 
-`firestore.rules` is permissive on purpose — the admin login is a client-side constant, so there is no server-verified identity to key rules off. Treat everything in `inquiries` as public data.
+Writers are `ContactForm` (create) and `AdminInbox` (read/accept/finish/rate/delete — optimistic local state, then a background write that re-syncs from the store if it fails). Readers are `UserDashboard` (`listInquiriesFor`) and `App.calculateUnreadCount` (`countUnread`, a head-only count). `subscribeInquiries` uses Supabase Realtime but nothing subscribes yet.
+
+**Firebase is still a dependency, for one job only:** the "Continue with Google" button (`src/lib/firebase.ts`, `src/lib/googleAuth.ts`). It no longer stores anything.
 
 ### 3D / animation components
 
