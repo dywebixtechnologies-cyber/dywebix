@@ -11,7 +11,15 @@ import logoSrc from '../assets/dywebix-logo.png';
 // crops to it rather than shipping a second file.
 const SRC_W = 690;
 const SRC_H = 522;
-const MARK = { x: 72, y: 168, w: 222, h: 172 };
+
+/**
+ * Region of the source artwork holding just the "dw" glyph, in source pixels.
+ * Exported so anything else that needs the mark alone — the 3D badge texture,
+ * for one — crops from the same numbers instead of guessing its own.
+ */
+export const LOGO_MARK_CROP = { x: 72, y: 168, w: 222, h: 172 };
+
+const MARK = LOGO_MARK_CROP;
 
 interface LogoProps {
   /** 'mark' = square dw glyph only, 'full' = whole dywebix lockup. */

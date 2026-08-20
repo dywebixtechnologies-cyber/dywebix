@@ -37,6 +37,7 @@ export default function Lanyard({
   backImage = null,
   imageFit = 'cover',
   imageBackground = null,
+  imageCrop = null,
   lanyardImage = null,
   lanyardWidth = 1
 }) {
@@ -65,6 +66,7 @@ export default function Lanyard({
             backImage={backImage}
             imageFit={imageFit}
             imageBackground={imageBackground}
+            imageCrop={imageCrop}
             lanyardImage={lanyardImage}
             lanyardWidth={lanyardWidth}
           />
@@ -112,6 +114,7 @@ function Band({
   backImage = null,
   imageFit = 'cover',
   imageBackground = null,
+  imageCrop = null,
   lanyardImage = null,
   lanyardWidth = 1
 }) {
@@ -155,10 +158,19 @@ function Band({
       const ry = rect.y * H;
       const rw = rect.w * W;
       const rh = rect.h * H;
+
+      // Optionally use only a region of the source image. A wide lockup fits a
+      // portrait card face very small; cropping to the square mark first lets
+      // it fill the face instead.
+      const sx = imageCrop ? imageCrop.x : 0;
+      const sy = imageCrop ? imageCrop.y : 0;
+      const sw = imageCrop ? imageCrop.w : img.width;
+      const sh = imageCrop ? imageCrop.h : img.height;
+
       const pick = imageFit === 'contain' ? Math.min : Math.max;
-      const scale = pick(rw / img.width, rh / img.height);
-      const dw = img.width * scale;
-      const dh = img.height * scale;
+      const scale = pick(rw / sw, rh / sh);
+      const dw = sw * scale;
+      const dh = sh * scale;
       const dx = rx + (rw - dw) / 2;
       const dy = ry + (rh - dh) / 2;
       ctx.save();
@@ -169,7 +181,7 @@ function Band({
         ctx.fillStyle = imageBackground;
         ctx.fillRect(rx, ry, rw, rh);
       }
-      ctx.drawImage(img, dx, dy, dw, dh);
+      ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
       ctx.restore();
     };
 
@@ -182,7 +194,7 @@ function Band({
     composite.anisotropy = 16;
     composite.needsUpdate = true;
     return composite;
-  }, [frontImage, backImage, imageFit, imageBackground, frontTex, backTex, materials.base.map]);
+  }, [frontImage, backImage, imageFit, imageBackground, imageCrop, frontTex, backTex, materials.base.map]);
   const [curve] = useState(
     () =>
       new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])

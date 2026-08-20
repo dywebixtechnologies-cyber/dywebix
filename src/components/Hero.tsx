@@ -43,10 +43,10 @@ export function Hero({ onSectionChange }: HeroProps) {
       </div>
 
       {/* Decorative clean grid patterns (Minimalist aesthetic) */}
-      <div className="absolute inset-x-0 top-0 h-96 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30" pointer-events-none="true" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30" />
 
       {/* Intro Metrics / Available Slot Ticker */}
-      <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 py-6 relative z-10">
+      <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-6 relative z-10">
         <div className="flex items-center gap-2 font-mono text-[10px] text-slate-500 uppercase tracking-widest">
           <span className="inline-block w-2 h-2 rounded-full bg-[#10b981] animate-pulse" />
           <span>Status: Accepting Projects</span>
@@ -103,7 +103,7 @@ export function Hero({ onSectionChange }: HeroProps) {
       </div>
 
       {/* Core Pillars Grid */}
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-slate-200 pt-12 relative z-10">
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 relative z-10">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-800 bg-white">
