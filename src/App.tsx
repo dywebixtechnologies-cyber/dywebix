@@ -141,7 +141,7 @@ export default function App() {
         </div>
 
         {/* SERVICES SECTION */}
-        <div id="services-section">
+        <div>
           <Services onSelectService={handleServiceSelect} />
         </div>
 
@@ -151,12 +151,12 @@ export default function App() {
         </div>
 
         {/* PORTFOLIO SHOWCASE GALLERY SECTION */}
-        <div id="portfolio-section">
+        <div>
           <Portfolio />
         </div>
 
         {/* CONTACT INQUIRY PLANNER SECTION */}
-        <div id="contact-section">
+        <div>
           <ContactForm 
             selectedPresetService={selectedServicePreset} 
             onInquirySubmitted={calculateUnreadCount} 
@@ -186,9 +186,9 @@ export default function App() {
             <div className="space-y-4">
               <span className="font-mono text-[9px] uppercase tracking-widest text-stone-600 font-bold block">NAVIGATION</span>
               <ul className="space-y-2.5 text-xs">
-                <li>
+                 <li>
                   <button onClick={() => handleSectionChange('services')} className="hover:text-stone-200 transition-colors cursor-pointer">
-                    Services Offerd
+                    Services Offered
                   </button>
                 </li>
                 <li>
@@ -203,7 +203,7 @@ export default function App() {
                 </li>
                 <li>
                   <button onClick={() => handleSectionChange('contact')} className="hover:text-stone-200 transition-colors cursor-pointer">
-                    Start Estmator
+                    Start Estimator
                   </button>
                 </li>
               </ul>

@@ -11,6 +11,8 @@ import { CheckCircle2, FileCheck, Send, Sparkles, MessageCircle, LogIn } from 'l
 import { Loader } from './Loader';
 import { createInquiry, listInquiries, listInquiriesFor } from '../lib/inquiries';
 import { useAuth } from '../context/AuthContext';
+import { isFirebaseConfigured } from '../lib/firebase';
+import { signInWithGoogle } from '../lib/googleAuth';
 
 // Studio WhatsApp contact (India, +91). Shown once a client has shared an idea.
 const WHATSAPP_NUMBER = '917397075166';
@@ -24,7 +26,32 @@ interface ContactFormProps {
 }
 
 export function ContactForm({ selectedPresetService, onInquirySubmitted }: ContactFormProps) {
-  const { user } = useAuth();
+  const { user, loginWithGoogle } = useAuth();
+  const [googleBusy, setGoogleBusy] = useState(false);
+  const [googleError, setGoogleError] = useState('');
+  const googleReady = isFirebaseConfigured();
+
+  const handleGoogleSignIn = () => {
+    if (!googleReady) {
+      setGoogleError('Google sign-in is not configured yet.');
+      return;
+    }
+    setGoogleBusy(true);
+    setGoogleError('');
+    void (async () => {
+      const outcome = await signInWithGoogle();
+      if (!outcome.ok) {
+        setGoogleBusy(false);
+        if (outcome.error) setGoogleError(outcome.error);
+        return;
+      }
+      const result = loginWithGoogle(outcome.name, outcome.email);
+      setGoogleBusy(false);
+      if (!result.ok) {
+        setGoogleError(result.error || 'Google sign-in failed.');
+      }
+    })();
+  };
 
   // Form fields
   const [name, setName] = useState('');
@@ -185,12 +212,30 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                 Create a free account or sign in first. Your project ideas are saved to your dashboard so you can track their progress.
               </p>
             </div>
-            <a
-              href="#login"
-              className="rounded-full bg-black text-white h-12 px-7 flex items-center justify-center gap-2 font-mono text-[10px] tracking-widest uppercase hover:bg-slate-900 transition-all cursor-pointer"
-            >
-              <LogIn className="w-4 h-4" /> Log in to continue
-            </a>
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full justify-center">
+              <a
+                href="#login"
+                className="rounded-full bg-black text-white h-12 px-7 flex items-center justify-center gap-2 font-mono text-[10px] tracking-widest uppercase hover:bg-slate-900 transition-all cursor-pointer w-full sm:w-auto"
+              >
+                <LogIn className="w-4 h-4" /> Log in to continue
+              </a>
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={!googleReady || googleBusy}
+                className="rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-center gap-3 text-xs font-semibold text-slate-700 cursor-pointer h-12 px-7 disabled:opacity-45 disabled:cursor-not-allowed w-full sm:w-auto"
+                id="contact-google-btn"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.76h3.56c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.76c-.98.66-2.23 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z" />
+                </svg>
+                {googleBusy ? 'Opening Google…' : 'Continue with Google'}
+              </button>
+            </div>
+            {googleError && <p className="text-[10px] text-red-500 font-mono">{googleError}</p>}
           </div>
         ) : (
         /* Form Container Split */

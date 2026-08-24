@@ -36,7 +36,7 @@ export function Services({ onSelectService }: ServicesProps) {
             </h2>
           </div>
           <p className="font-sans text-slate-500 max-w-sm text-sm md:text-base leading-relaxed font-light">
-            Each project is coded hand-craft from absolute zero. I don't use rigid templates, drag-and-drop page builders, or heavy plugins that bloated the network traffic.
+            Each project is coded by hand from absolute zero. I don't use rigid templates, drag-and-drop page builders, or heavy plugins that bloat network traffic.
           </p>
         </div>
 

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useRef, Suspense, lazy } from 'react';
+import React, { useState, useRef, useEffect, Suspense, lazy } from 'react';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import { PROJECTS } from '../data/portfolioData';
 import { Project } from '../types';
@@ -35,6 +35,12 @@ export function Portfolio() {
   const filteredProjects = filter === 'all' 
     ? PROJECTS 
     : PROJECTS.filter(p => p.category === filter);
+
+  useEffect(() => {
+    if (selectedProject && !filteredProjects.some(p => p.id === selectedProject.id)) {
+      setSelectedProject(filteredProjects[0] || null);
+    }
+  }, [filter, filteredProjects, selectedProject]);
 
   const handleProjectSelect = (p: Project) => {
     setSelectedProject(p);

@@ -195,7 +195,7 @@ export function UserDashboard() {
                       <p className="text-slate-500 text-xs font-light line-clamp-2">{p.details}</p>
                       {p.finished && (
                         <p className="mt-1 inline-flex items-center gap-1.5 text-indigo-600 text-xs font-semibold">
-                          <Sparkles className="w-3.5 h-3.5" /> Your idea is build...!
+                          <Sparkles className="w-3.5 h-3.5" /> Your idea is built!
                         </p>
                       )}
                     </div>
