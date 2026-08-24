@@ -136,11 +136,27 @@ function Band({
   const frontTex = useTexture(frontImage || BLANK_PIXEL);
   const backTex = useTexture(backImage || BLANK_PIXEL);
 
+  const customTextureRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (customTextureRef.current) {
+        customTextureRef.current.dispose();
+      }
+    };
+  }, []);
+
   // Composite the front/back images into the card's texture atlas (front = left
   // half, back = right half). Each image is drawn aspect-preserving (no stretch).
   const cardMap = useMemo(() => {
     const baseMap = materials.base.map;
     if (!frontImage && !backImage) return baseMap;
+
+    // Dispose of previous custom texture to avoid GPU memory leaks
+    if (customTextureRef.current) {
+      customTextureRef.current.dispose();
+      customTextureRef.current = null;
+    }
 
     const baseImg = baseMap.image;
     const W = baseImg.width;
@@ -193,6 +209,8 @@ function Band({
     composite.flipY = baseMap.flipY;
     composite.anisotropy = 16;
     composite.needsUpdate = true;
+
+    customTextureRef.current = composite;
     return composite;
   }, [frontImage, backImage, imageFit, imageBackground, imageCrop, frontTex, backTex, materials.base.map]);
   const [curve] = useState(

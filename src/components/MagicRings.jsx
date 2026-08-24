@@ -150,7 +150,8 @@ export default function MagicRings({
     };
 
     const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, transparent: true });
-    const quad = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), material);
+    const geometry = new THREE.PlaneGeometry(1, 1);
+    const quad = new THREE.Mesh(geometry, material);
     scene.add(quad);
 
     const resize = () => {
@@ -184,6 +185,13 @@ export default function MagicRings({
     mount.addEventListener('mouseenter', onMouseEnter);
     mount.addEventListener('mouseleave', onMouseLeave);
     mount.addEventListener('click', onClick);
+
+    const handleContextLost = (event) => {
+      event.preventDefault();
+      console.warn('WebGL Context Lost in MagicRings. Animation frame paused.');
+      cancelAnimationFrame(frameId);
+    };
+    renderer.domElement.addEventListener('webglcontextlost', handleContextLost, false);
 
     let frameId;
     const animate = (t) => {
@@ -230,9 +238,11 @@ export default function MagicRings({
       mount.removeEventListener('mouseenter', onMouseEnter);
       mount.removeEventListener('mouseleave', onMouseLeave);
       mount.removeEventListener('click', onClick);
+      renderer.domElement.removeEventListener('webglcontextlost', handleContextLost);
       mount.removeChild(renderer.domElement);
       renderer.dispose();
       material.dispose();
+      geometry.dispose();
     };
   }, []);
 
