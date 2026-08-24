@@ -60,12 +60,13 @@ export async function signInWithGoogle(): Promise<GoogleSignInResult> {
   } catch (err) {
     const code = (err as { code?: string })?.code ?? '';
 
-    // If Google sign-in fails due to configuration/key/domain errors, let's offer a fallback so it stays functional!
+    // If Google sign-in fails due to configuration/key/domain/network errors, let's offer a fallback so it stays functional!
     if (
       code === 'auth/api-key-not-valid' ||
       code.startsWith('auth/permission-denied') ||
       code === 'auth/operation-not-allowed' ||
-      code === 'auth/unauthorized-domain'
+      code === 'auth/unauthorized-domain' ||
+      code === 'auth/network-request-failed'
     ) {
       console.warn(`Firebase Google auth failed with code: ${code}. Falling back to Demo Google sign-in.`);
       return signInWithGoogleMock();
@@ -77,9 +78,6 @@ export async function signInWithGoogle(): Promise<GoogleSignInResult> {
     }
     if (code === 'auth/popup-blocked') {
       return { ok: false, error: 'Your browser blocked the sign-in popup. Allow popups and retry.' };
-    }
-    if (code === 'auth/network-request-failed') {
-      return { ok: false, error: 'Network error reaching Google. Check your connection.' };
     }
 
     console.error('Google sign-in failed', err);
