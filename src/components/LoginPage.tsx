@@ -203,7 +203,8 @@ export function LoginPage() {
 
         {!googleReady && (
           <p className="font-mono text-[8.5px] text-slate-400 text-center leading-relaxed">
-            Note: Firebase credentials are initialized dynamically.
+            Google sign-in is unavailable: this build has no Firebase config.
+            Set the VITE_FIREBASE_* variables where the site is hosted.
           </p>
         )}
 

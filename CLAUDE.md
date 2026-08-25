@@ -17,7 +17,9 @@ There is no test suite and no test runner configured.
 
 ## Architecture
 
-Single-page React 19 + Vite + Tailwind v4 marketing site for a web studio ("dywebixtech"). Everything is client-side — **there is no backend and no database**, despite `express` and `@google/genai` sitting in `package.json` (neither is imported anywhere in `src/`).
+Single-page React 19 + Vite + Tailwind v4 marketing site for a web studio ("dywebixtech"). There is **no server of our own**: the app is a static bundle that talks to hosted services (Supabase for data, Firebase Auth for Google sign-in) directly from the browser, and falls back to `localStorage` when neither is configured. `express`, `@google/genai` and `dotenv` sit in `package.json` but are imported nowhere in `src/`.
+
+Both services are configured entirely through `VITE_*` env vars in `.env` (see `.env.example`); nothing is committed. **The app degrades silently when they are unset** — inquiries go to `localStorage` and the Google button renders disabled — so an apparently working site may not be talking to any backend. Vite reads `.env` only at startup, so restart the dev server after changing it.
 
 ### Routing is hash-based and lives entirely in `src/App.tsx`
 
@@ -33,16 +35,18 @@ Single-page React 19 + Vite + Tailwind v4 marketing site for a web studio ("dywe
 
 Home-page navigation is not routing: `handleSectionChange` scrolls to `#{section}-section` elements with an 80px sticky-nav offset. Anything that would reach the contact form while logged out redirects to `#login` instead.
 
-### State: localStorage is the database
+### State
 
-Two independent stores, both plain JSON in `localStorage`, both read/written directly by components (no repository layer):
+Two independent stores, and they are **not** alike:
 
-- **`inquiries`** — array of `Inquiry` (`src/types.ts`), now behind `src/lib/inquiries.ts` rather than read from `localStorage` directly. See **Inquiry storage** below.
-- **`dywebix-users` / `dywebix-current-user`** — `src/context/AuthContext.tsx`. `AuthProvider` wraps the app in `main.tsx`; use `useAuth()` for `user`, `isAdmin`, `login`, `signup`, `loginWithGoogle`, `logout`.
+- **`inquiries`** — array of `Inquiry` (`src/types.ts`), behind `src/lib/inquiries.ts`. Postgres-backed when configured. See **Inquiry storage** below.
+- **`dywebix-users` / `dywebix-current-user`** — plain JSON in `localStorage`, in `src/context/AuthContext.tsx`. `AuthProvider` wraps the app in `main.tsx`; use `useAuth()` for `user`, `isAdmin`, `login`, `signup`, `loginWithGoogle`, `logout`. Accounts are per-browser and passwords are stored in the clear — this store never moved to a real backend.
 
 Because there is no server, mutations from a dashboard don't notify other components automatically — `App` passes `calculateUnreadCount` down as `onInquiryCountChange` so writers can trigger a re-count. Follow that pattern rather than adding a store.
 
-Admin credentials are hardcoded constants at the top of `AuthContext.tsx` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`) and ship in the client bundle — deliberate for this static site. `GOOGLE_CLIENT_ID` in the same file is empty; the "Continue with Google" button stays disabled until a real Client ID is set — there is no demo/offline identity, and `loginWithGoogle` rejects any call without a verified name and email.
+Admin credentials are hardcoded constants at the top of `AuthContext.tsx` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`) and ship readable in the client bundle — deliberate for this static site, but it means the admin gate deters only casual visitors and no rule keyed on it can be a real security boundary.
+
+Google sign-in runs through **Firebase Auth** (`signInWithPopup`), so the app holds no Google Client ID of its own — setup is entirely console-side (enable the Google provider; list every host under Authorized domains, `localhost` included). `loginWithGoogle` in `AuthContext` rejects any call without a Google-verified name and email, so there is no demo/offline identity. `googleAuth.ts` maps `auth/*` codes to specific messages; a suspended API key and a blocked popup need different fixes, so keep them distinguishable rather than collapsing them into "try again".
 
 ### Inquiry storage
 
