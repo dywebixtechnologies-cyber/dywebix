@@ -222,7 +222,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
               <button
                 type="button"
                 onClick={handleGoogleSignIn}
-                disabled={!googleReady || googleBusy}
+                disabled={googleBusy}
                 className="rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-center gap-3 text-xs font-semibold text-slate-700 cursor-pointer h-12 px-7 disabled:opacity-45 disabled:cursor-not-allowed w-full sm:w-auto"
                 id="contact-google-btn"
               >

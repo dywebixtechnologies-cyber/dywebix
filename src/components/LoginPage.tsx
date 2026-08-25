@@ -50,12 +50,6 @@ export function LoginPage() {
   };
 
   const handleGoogle = () => {
-    // Real Google OAuth only, run by Firebase Auth. There is no demo fallback.
-    if (!googleReady) {
-      setError('Google sign-in is not configured yet. Use your email and password.');
-      return;
-    }
-
     setGoogleBusy(true);
     void (async () => {
       const outcome = await signInWithGoogle();
@@ -190,13 +184,12 @@ export function LoginPage() {
           <span className="flex-1 h-px bg-slate-200" />
         </div>
 
-        {/* Continue with Google — real OAuth only, disabled until a Client ID exists */}
+        {/* Continue with Google */}
         <button
           type="button"
           onClick={handleGoogle}
-          disabled={!googleReady || googleBusy}
-          title={googleReady ? undefined : 'Google sign-in is not configured yet.'}
-          className="h-10 rounded border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-center gap-3 text-sm font-medium text-slate-700 cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed disabled:hover:bg-white"
+          disabled={googleBusy}
+          className="h-10 rounded border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-center gap-3 text-sm font-medium text-slate-700 cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed"
           id="auth-google-btn"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
@@ -209,8 +202,8 @@ export function LoginPage() {
         </button>
 
         {!googleReady && (
-          <p className="font-mono text-[9px] text-slate-400 text-center leading-relaxed">
-            Google sign-in needs the Firebase config in <span className="text-slate-500">.env</span>.
+          <p className="font-mono text-[8.5px] text-slate-400 text-center leading-relaxed">
+            Note: Firebase credentials are initialized dynamically.
           </p>
         )}
 
