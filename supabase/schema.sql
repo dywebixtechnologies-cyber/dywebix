@@ -20,6 +20,22 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
+-- ---------------------------------------------------------------------------
+-- is_admin()
+--
+-- SECURITY DEFINER on purpose: it runs as the owner and therefore bypasses RLS.
+-- A policy on profiles that selected from profiles directly would recurse
+-- infinitely (Postgres 42P17), so every admin test goes through this.
+-- ---------------------------------------------------------------------------
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer set search_path = public
+as $$
+  select exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin);
+$$;
+
 -- A signed-in user may read their own profile. Reading it is how the app
 -- learns whether they are an admin.
 drop policy if exists "read own profile" on public.profiles;
@@ -39,7 +55,7 @@ create policy "update own profile"
 drop policy if exists "admins read all profiles" on public.profiles;
 create policy "admins read all profiles"
   on public.profiles for select
-  using (exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin));
+  using (public.is_admin());
 
 -- Create the profile automatically whenever Supabase creates an account,
 -- covering both email/password signup and the Google OAuth flow.
@@ -104,16 +120,6 @@ drop policy if exists "inquiries are readable by anyone" on public.inquiries;
 drop policy if exists "anyone may submit an inquiry" on public.inquiries;
 drop policy if exists "anyone may update an inquiry" on public.inquiries;
 drop policy if exists "anyone may delete an inquiry" on public.inquiries;
-
--- Helper so the admin test is written once.
-create or replace function public.is_admin()
-returns boolean
-language sql
-stable
-security definer set search_path = public
-as $$
-  select exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin);
-$$;
 
 -- A signed-in user may submit a brief, but only in their own name.
 drop policy if exists "submit own inquiry" on public.inquiries;
