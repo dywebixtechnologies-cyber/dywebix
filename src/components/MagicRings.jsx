@@ -108,6 +108,10 @@ export default function MagicRings({
     let renderer;
     try {
       renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+    // The D3D shader compiler emits harmless float-precision warnings (X4122)
+    // for three's generated shaders, and three prints the whole info log.
+    // Keep the check in dev, where a real shader error must not be hidden.
+    if (import.meta.env.PROD) renderer.debug.checkShaderErrors = false;
     } catch {
       return;
     }

@@ -9,3 +9,6 @@ coverage/
 
 # Firebase Hosting local deploy cache
 .firebase/
+
+.vercel
+.env*

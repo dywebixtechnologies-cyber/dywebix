@@ -55,7 +55,10 @@ export default function Lanyard({
         camera={{ position: position, fov: fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
         gl={{ alpha: transparent }}
-        onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
+        onCreated={({ gl }) => {
+          gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1);
+          if (import.meta.env.PROD) gl.debug.checkShaderErrors = false;
+        }}
       >
         <Suspense fallback={null}>
         <ambientLight intensity={Math.PI} />
