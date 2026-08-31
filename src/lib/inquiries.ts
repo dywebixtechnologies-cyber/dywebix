@@ -35,6 +35,7 @@ interface InquiryRow {
   finished_at: string | null;
   rate: string | null;
   owner_email: string | null;
+  owner_id: string | null;
 }
 
 function toInquiry(row: InquiryRow): Inquiry {
@@ -55,6 +56,7 @@ function toInquiry(row: InquiryRow): Inquiry {
     finishedAt: row.finished_at ?? undefined,
     rate: row.rate ?? undefined,
     ownerEmail: row.owner_email ?? undefined,
+    ownerId: row.owner_id ?? undefined,
   };
 }
 
@@ -76,6 +78,7 @@ const COLUMN: Record<keyof Inquiry, keyof InquiryRow> = {
   finishedAt: 'finished_at',
   rate: 'rate',
   ownerEmail: 'owner_email',
+  ownerId: 'owner_id',
 };
 
 /**
@@ -136,20 +139,22 @@ export async function listInquiries(): Promise<Inquiry[]> {
   return (data as InquiryRow[]).map(toInquiry);
 }
 
-/** Inquiries submitted by one signed-in user, newest first. */
-export async function listInquiriesFor(ownerEmail: string): Promise<Inquiry[]> {
-  const target = ownerEmail.toLowerCase();
+/**
+ * Inquiries submitted by one signed-in user, newest first. Keyed on the auth
+ * user id, which is what the RLS policy matches — an email could be claimed.
+ */
+export async function listInquiriesFor(ownerId: string): Promise<Inquiry[]> {
   const db = getSupabase();
 
   if (!db) {
-    return sortNewestFirst(readLocal()).filter((i) => i.ownerEmail?.toLowerCase() === target);
+    return sortNewestFirst(readLocal()).filter((i) => i.ownerId === ownerId);
   }
 
   // Filter in Postgres rather than fetching the whole table to the browser.
   const { data, error } = await db
     .from(TABLE)
     .select('*')
-    .ilike('owner_email', target)
+    .eq('owner_id', ownerId)
     .order('created_at', { ascending: false });
 
   if (error) throw error;

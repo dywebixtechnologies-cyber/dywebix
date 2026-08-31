@@ -28,7 +28,7 @@ export function UserDashboard() {
       return;
     }
     let cancelled = false;
-    listInquiriesFor(user.email)
+    listInquiriesFor(user.id)
       .then((mine) => {
         if (cancelled) return;
         // Newest first

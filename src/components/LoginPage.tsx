@@ -7,9 +7,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { LogIn, UserPlus, ArrowLeft, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { Logo } from './Logo';
-import { useAuth } from '../context/AuthContext';
-import { isFirebaseConfigured } from '../lib/firebase';
-import { signInWithGoogle } from '../lib/googleAuth';
+import { useAuth, isAuthConfigured } from '../context/AuthContext';
 
 type Mode = 'login' | 'signup';
 
@@ -25,12 +23,17 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  const resetMessages = () => setError('');
+  const resetMessages = () => {
+    setError('');
+    setNotice('');
+  };
 
   // Firebase Auth performs the OAuth handshake, so no separate Client ID is
   // needed — the button is usable as soon as the project config is present.
-  const googleReady = isFirebaseConfigured();
+  const googleReady = isAuthConfigured();
   const [googleBusy, setGoogleBusy] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState('');
 
   const routeAfterAuth = (role?: 'admin' | 'user') => {
     // Admins land on the admin dashboard; users on their own dashboard.
@@ -39,31 +42,42 @@ export function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const result =
-      mode === 'login' ? login(email, password) : signup(name, email, password);
+    if (busy) return;
+    setBusy(true);
+    setNotice('');
 
-    if (!result.ok) {
-      setError(result.error || 'Something went wrong.');
-      return;
-    }
-    routeAfterAuth(result.user?.role);
+    void (async () => {
+      const result =
+        mode === 'login'
+          ? await login(email, password)
+          : await signup(name, email, password);
+      setBusy(false);
+
+      if (!result.ok) {
+        setError(result.error || 'Something went wrong.');
+        return;
+      }
+
+      // Signing up with email confirmation on leaves no session: the account
+      // exists but cannot be used until the emailed link is clicked.
+      if (result.needsConfirmation) {
+        setNotice('Account created. Check your email for the confirmation link, then log in.');
+        setMode('login');
+        setPassword('');
+        return;
+      }
+
+      routeAfterAuth(result.user?.role);
+    })();
   };
 
   const handleGoogle = () => {
     setGoogleBusy(true);
     void (async () => {
-      const outcome = await signInWithGoogle();
-      if (!outcome.ok) {
-        setGoogleBusy(false);
-        if (outcome.error) setError(outcome.error);
-        return;
-      }
-
-      // Hand the Google-verified identity to the local account store.
-      const result = loginWithGoogle(outcome.name, outcome.email);
+      // On success Supabase navigates away to Google, so nothing below runs.
+      const result = await loginWithGoogle();
       setGoogleBusy(false);
-      if (result.ok) routeAfterAuth(result.user?.role);
-      else setError(result.error || 'Google sign-in failed.');
+      if (!result.ok) setError(result.error || 'Google sign-in failed.');
     })();
   };
 
@@ -163,10 +177,12 @@ export function LoginPage() {
           </div>
 
           {error && <span className="text-[11px] text-red-500 font-mono">{error}</span>}
+          {notice && <span className="text-[11px] text-emerald-600 font-mono">{notice}</span>}
 
           <button
             type="submit"
-            className="mt-1 h-10 rounded bg-black text-white text-xs font-mono tracking-widest uppercase hover:bg-slate-900 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            disabled={busy}
+            className="mt-1 h-10 rounded bg-black text-white text-xs font-mono tracking-widest uppercase hover:bg-slate-900 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             id="auth-submit-btn"
           >
             {mode === 'login' ? (

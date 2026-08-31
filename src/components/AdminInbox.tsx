@@ -30,7 +30,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
 
   useEffect(() => {
     loadInquiries();
-    setUserCount(getRegisteredUserCount());
+    void getRegisteredUserCount().then(setUserCount).catch(() => setUserCount(0));
   }, []);
 
   // Keep the rate input in sync with whichever inquiry is selected.

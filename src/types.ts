@@ -43,4 +43,5 @@ export interface Inquiry {
   finishedAt?: string;   // ISO timestamp when the project was finished
   rate?: string;         // Rate the admin sets for this project (e.g. "₹2,50,000")
   ownerEmail?: string;   // Email of the logged-in user who submitted this idea
+  ownerId?: string;      // Supabase auth user id — what the RLS policies match on
 }

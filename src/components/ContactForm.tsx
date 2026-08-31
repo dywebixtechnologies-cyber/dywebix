@@ -10,9 +10,7 @@ import { Inquiry } from '../types';
 import { CheckCircle2, FileCheck, Send, Sparkles, MessageCircle, LogIn } from 'lucide-react';
 import { Loader } from './Loader';
 import { createInquiry, listInquiries, listInquiriesFor } from '../lib/inquiries';
-import { useAuth } from '../context/AuthContext';
-import { isFirebaseConfigured } from '../lib/firebase';
-import { signInWithGoogle } from '../lib/googleAuth';
+import { useAuth, isAuthConfigured } from '../context/AuthContext';
 
 // Studio WhatsApp contact (India, +91). Shown once a client has shared an idea.
 const WHATSAPP_NUMBER = '917397075166';
@@ -29,7 +27,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
   const { user, loginWithGoogle } = useAuth();
   const [googleBusy, setGoogleBusy] = useState(false);
   const [googleError, setGoogleError] = useState('');
-  const googleReady = isFirebaseConfigured();
+  const googleReady = isAuthConfigured();
 
   const handleGoogleSignIn = () => {
     if (!googleReady) {
@@ -39,17 +37,10 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
     setGoogleBusy(true);
     setGoogleError('');
     void (async () => {
-      const outcome = await signInWithGoogle();
-      if (!outcome.ok) {
-        setGoogleBusy(false);
-        if (outcome.error) setGoogleError(outcome.error);
-        return;
-      }
-      const result = loginWithGoogle(outcome.name, outcome.email);
+      // On success the browser navigates to Google, so nothing below runs.
+      const result = await loginWithGoogle();
       setGoogleBusy(false);
-      if (!result.ok) {
-        setGoogleError(result.error || 'Google sign-in failed.');
-      }
+      if (!result.ok) setGoogleError(result.error || 'Google sign-in failed.');
     })();
   };
 
@@ -73,7 +64,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
     if (user) {
       setName(user.name);
       setEmail(user.email);
-      listInquiriesFor(user.email)
+      listInquiriesFor(user.id)
         .then((mine) => setHasSharedIdea(mine.length > 0))
         .catch(() => setHasSharedIdea(false));
     }
@@ -146,7 +137,9 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
           timestamp: new Date().toISOString(),
           read: false,
           accepted: false,
-          ownerEmail: user?.email
+          ownerEmail: user?.email,
+          // What the RLS insert policy checks: you may only file under your own id.
+          ownerId: user?.id
         };
 
         await createInquiry(newInquiry);

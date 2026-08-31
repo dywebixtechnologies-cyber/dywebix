@@ -27,10 +27,14 @@ let client: SupabaseClient | null = null;
 export function getSupabase(): SupabaseClient | null {
   if (!isSupabaseConfigured()) return null;
   if (!client) {
+    // Supabase owns authentication, so it must persist and refresh the
+    // session itself — that JWT is what every RLS policy is evaluated against.
     client = createClient(url, anonKey, {
-      // Sign-in is handled by Firebase Auth, so Supabase must not try to
-      // persist or refresh a session of its own.
-      auth: { persistSession: false, autoRefreshToken: false },
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
     });
   }
   return client;
