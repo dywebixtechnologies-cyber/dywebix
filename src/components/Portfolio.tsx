@@ -10,7 +10,6 @@ import { Project } from '../types';
 import { CheckCircle, Info, ChevronRight, Laptop, FileCode2, MousePointer2 } from 'lucide-react';
 import { Loader } from './Loader';
 import logoSrc from '../assets/dywebix-logo.png';
-import { LOGO_MARK_CROP } from './Logo';
 
 // The R3F/rapier bundle is heavy, so the ID card is code-split and only mounted
 // once the portfolio section actually scrolls into view.
@@ -343,7 +342,6 @@ export function Portfolio() {
                   backImage={logoSrc}
                   imageFit="contain"
                   imageBackground="#ffffff"
-                  imageCrop={LOGO_MARK_CROP}
                 />
               </Suspense>
             )}
