@@ -12,3 +12,11 @@ coverage/
 
 .vercel
 .env*
+
+# Local agent tooling. settings.local.json is per-developer and can capture
+# command arguments verbatim — including API keys from one-off verification
+# calls — so it must never be committed.
+.claude/settings.local.json
+.agents/
+.claude/skills/
+skills-lock.json
