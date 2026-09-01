@@ -129,7 +129,7 @@ export default function App() {
   } else {
     viewKey = 'home';
     view = (
-    <div className="bg-[#061c3a] text-white min-h-screen selection:bg-[#0c6fc2] selection:text-white font-sans antialiased">
+    <div className="bg-[#EEF4FC] text-[#0b3566] min-h-screen selection:bg-[#0c6fc2] selection:text-white font-sans antialiased">
 
       {/* Dynamic Header Navbar */}
       <Navigation
@@ -171,13 +171,13 @@ export default function App() {
       </main>
 
       {/* FOOTER SECTION: Minimalist Design-Forward Panel */}
-      <footer className="bg-[#03101f] text-[#9dc0e8] border-t border-[#0b3566] py-16 px-6">
+      <footer className="bg-[#041a37] text-[#9dc0e8] border-t border-[#0b3566] py-16 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 border-b border-[#0b3566] pb-12">
           
           {/* Logo Brand Descriptor (Columns 1-4) */}
           <div className="md:col-span-4 space-y-4">
             <div className="flex items-center">
-              <div className="inline-flex items-center">
+              <div className="inline-flex items-center bg-white rounded-md px-3 py-2">
                 <Logo variant="full" size={28} />
               </div>
             </div>

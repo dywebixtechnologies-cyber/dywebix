@@ -82,33 +82,33 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#061c3a] text-white flex flex-col items-center justify-center px-6 py-10 font-sans antialiased">
+    <div className="min-h-screen bg-[#EEF4FC] text-[#0b3566] flex flex-col items-center justify-center px-6 py-10 font-sans antialiased">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-[360px] bg-[#0b2748] border border-[#173a66] rounded-xl shadow-md p-6 flex flex-col gap-4"
+        className="w-full max-w-[360px] bg-white border border-[#cbdff5] rounded-xl shadow-md p-6 flex flex-col gap-4"
       >
         {/* Brand */}
         <div className="flex flex-col items-center gap-2 text-center">
           <Logo variant="full" size={34} />
           <div>
-            <h1 className="font-display font-semibold text-lg tracking-tight text-white">
+            <h1 className="font-display font-semibold text-lg tracking-tight text-[#072750]">
               {mode === 'login' ? 'Welcome back' : 'Create your account'}
             </h1>
-            <p className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#7f9cc4] mt-0.5">
+            <p className="font-sans text-[11px] uppercase tracking-[0.08em] text-slate-400 mt-0.5">
               Account
             </p>
           </div>
         </div>
 
         {/* Mode toggle */}
-        <div className="grid grid-cols-2 gap-1 bg-[#0e2f5c] rounded p-1">
+        <div className="grid grid-cols-2 gap-1 bg-[#dfeaf8] rounded p-1">
           <button
             type="button"
             onClick={() => { setMode('login'); resetMessages(); }}
             className={`py-2 rounded font-sans text-xs uppercase tracking-[0.08em] transition-all cursor-pointer ${
-              mode === 'login' ? 'bg-[#0b2748] text-white font-semibold shadow-xs' : 'text-[#8fabcf] hover:text-[#dbe7f7]'
+              mode === 'login' ? 'bg-white text-[#0b3566] font-semibold shadow-xs' : 'text-slate-500 hover:text-slate-800'
             }`}
           >
             Log in
@@ -117,7 +117,7 @@ export function LoginPage() {
             type="button"
             onClick={() => { setMode('signup'); resetMessages(); }}
             className={`py-2 rounded font-sans text-xs uppercase tracking-[0.08em] transition-all cursor-pointer ${
-              mode === 'signup' ? 'bg-[#0b2748] text-white font-semibold shadow-xs' : 'text-[#8fabcf] hover:text-[#dbe7f7]'
+              mode === 'signup' ? 'bg-white text-[#0b3566] font-semibold shadow-xs' : 'text-slate-500 hover:text-slate-800'
             }`}
           >
             Sign up
@@ -127,32 +127,32 @@ export function LoginPage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {mode === 'signup' && (
             <div className="flex flex-col gap-1.5">
-              <label className="font-sans text-[11px] text-[#7f9cc4] uppercase tracking-wider" htmlFor="auth-name">Full Name</label>
+              <label className="font-sans text-[11px] text-slate-400 uppercase tracking-wider" htmlFor="auth-name">Full Name</label>
               <input
                 id="auth-name"
                 type="text"
                 placeholder="e.g. Sarah Connor"
                 value={name}
                 onChange={(e) => { setName(e.target.value); resetMessages(); }}
-                className="h-10 px-4 border border-[#173a66] text-sm rounded bg-[#061c3a]/40 focus:bg-[#0b2748] transition-colors focus:border-[#0c6fc2] focus:outline-none"
+                className="h-10 px-4 border border-[#cbdff5] text-sm rounded bg-[#EEF4FC]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none"
               />
             </div>
           )}
 
           <div className="flex flex-col gap-1.5">
-            <label className="font-sans text-[11px] text-[#7f9cc4] uppercase tracking-wider" htmlFor="auth-email">Email Address</label>
+            <label className="font-sans text-[11px] text-slate-400 uppercase tracking-wider" htmlFor="auth-email">Email Address</label>
             <input
               id="auth-email"
               type="text"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => { setEmail(e.target.value); resetMessages(); }}
-              className="h-10 px-4 border border-[#173a66] text-sm rounded bg-[#061c3a]/40 focus:bg-[#0b2748] transition-colors focus:border-[#0c6fc2] focus:outline-none"
+              className="h-10 px-4 border border-[#cbdff5] text-sm rounded bg-[#EEF4FC]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none"
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="font-sans text-[11px] text-[#7f9cc4] uppercase tracking-wider" htmlFor="auth-password">Password</label>
+            <label className="font-sans text-[11px] text-slate-400 uppercase tracking-wider" htmlFor="auth-password">Password</label>
             <div className="relative">
               <input
                 id="auth-password"
@@ -160,7 +160,7 @@ export function LoginPage() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); resetMessages(); }}
-                className="w-full h-10 pl-4 pr-11 border border-[#173a66] text-sm rounded bg-[#061c3a]/40 focus:bg-[#0b2748] transition-colors focus:border-[#0c6fc2] focus:outline-none"
+                className="w-full h-10 pl-4 pr-11 border border-[#cbdff5] text-sm rounded bg-[#EEF4FC]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none"
               />
               <button
                 type="button"
@@ -168,7 +168,7 @@ export function LoginPage() {
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                 aria-pressed={showPassword}
                 title={showPassword ? 'Hide password' : 'Show password'}
-                className="absolute inset-y-0 right-0 w-11 flex items-center justify-center text-[#7f9cc4] hover:text-white transition-colors cursor-pointer focus:outline-none"
+                className="absolute inset-y-0 right-0 w-11 flex items-center justify-center text-slate-400 hover:text-[#0b3566] transition-colors cursor-pointer focus:outline-none"
                 id="auth-password-toggle"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -182,7 +182,7 @@ export function LoginPage() {
           <button
             type="submit"
             disabled={busy}
-            className="mt-1 h-10 rounded bg-[#0c6fc2] text-white text-xs font-sans tracking-[0.08em] uppercase hover:bg-[#0b2748] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-1 h-10 rounded bg-[#0c6fc2] text-white text-xs font-sans tracking-[0.08em] uppercase hover:bg-[#072750] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             id="auth-submit-btn"
           >
             {mode === 'login' ? (
@@ -195,9 +195,9 @@ export function LoginPage() {
 
         {/* Divider */}
         <div className="flex items-center gap-3">
-          <span className="flex-1 h-px bg-[#173a66]" />
-          <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#7f9cc4]">or</span>
-          <span className="flex-1 h-px bg-[#173a66]" />
+          <span className="flex-1 h-px bg-slate-200" />
+          <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-slate-400">or</span>
+          <span className="flex-1 h-px bg-slate-200" />
         </div>
 
         {/* Continue with Google */}
@@ -205,7 +205,7 @@ export function LoginPage() {
           type="button"
           onClick={handleGoogle}
           disabled={googleBusy}
-          className="h-10 rounded border border-[#173a66] bg-[#0b2748] hover:bg-[#061c3a] transition-colors flex items-center justify-center gap-3 text-sm font-medium text-[#c3d6ee] cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed"
+          className="h-10 rounded border border-[#cbdff5] bg-white hover:bg-[#eef4fc] transition-colors flex items-center justify-center gap-3 text-sm font-medium text-slate-700 cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed"
           id="auth-google-btn"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
@@ -218,17 +218,17 @@ export function LoginPage() {
         </button>
 
         {!googleReady && (
-          <p className="font-sans text-[11px] text-[#7f9cc4] text-center leading-relaxed">
+          <p className="font-sans text-[11px] text-slate-400 text-center leading-relaxed">
             Google sign-in is unavailable: this build has no Firebase config.
             Set the VITE_FIREBASE_* variables where the site is hosted.
           </p>
         )}
 
-        <p className="font-sans text-[11px] text-[#7f9cc4] text-center leading-relaxed flex items-center justify-center gap-1.5">
+        <p className="font-sans text-[11px] text-slate-400 text-center leading-relaxed flex items-center justify-center gap-1.5">
           <ShieldCheck className="w-3 h-3" /> Studio administrators sign in here too.
         </p>
 
-        <a href="/" className="flex items-center justify-center gap-1.5 font-sans text-xs uppercase tracking-[0.08em] text-[#7f9cc4] hover:text-[#0c6fc2] transition-colors">
+        <a href="/" className="flex items-center justify-center gap-1.5 font-sans text-xs uppercase tracking-[0.08em] text-slate-400 hover:text-[#0c6fc2] transition-colors">
           <ArrowLeft className="w-3 h-3" /> Back to site
         </a>
       </motion.div>

@@ -30,27 +30,18 @@ interface LogoProps {
 }
 
 /**
- * The dywebixtech logo.
- *
- * The artwork is dark-blue-on-white with no transparency, so on the dark navy
- * ground it needs a white plate to sit on — `mix-blend-multiply` would render
- * it almost invisible. The plate is the lockup, not a workaround: it reads as
- * a deliberate badge.
+ * The dywebixtech logo. `mix-blend-multiply` drops the artwork's white plate
+ * onto the site's #EEF4FC background without needing a cut-out PNG.
  */
 export function Logo({ variant = 'mark', size = 36, className = '' }: LogoProps) {
-  const plate =
-    'inline-flex items-center justify-center bg-white rounded-md shrink-0';
-
   if (variant === 'full') {
     return (
-      <span className={`${plate} px-2.5 py-1.5 ${className}`}>
-        <img
-          src={logoSrc}
-          alt="dywebixtech"
-          style={{ height: size }}
-          className="w-auto object-contain"
-        />
-      </span>
+      <img
+        src={logoSrc}
+        alt="dywebixtech"
+        style={{ height: size }}
+        className={`w-auto object-contain mix-blend-multiply ${className}`}
+      />
     );
   }
 
@@ -58,22 +49,20 @@ export function Logo({ variant = 'mark', size = 36, className = '' }: LogoProps)
   const scale = size / Math.max(MARK.w, MARK.h);
 
   return (
-    <span className={`${plate} p-1 ${className}`}>
-      <span
-        role="img"
-        aria-label="dywebixtech"
-        style={{
-          width: size,
-          height: size,
-          backgroundImage: `url(${logoSrc})`,
-          backgroundSize: `${SRC_W * scale}px ${SRC_H * scale}px`,
-          backgroundPosition: `${-MARK.x * scale + (size - MARK.w * scale) / 2}px ${
-            -MARK.y * scale + (size - MARK.h * scale) / 2
-          }px`,
-          backgroundRepeat: 'no-repeat',
-        }}
-        className="inline-block shrink-0"
-      />
-    </span>
+    <span
+      role="img"
+      aria-label="dywebixtech"
+      style={{
+        width: size,
+        height: size,
+        backgroundImage: `url(${logoSrc})`,
+        backgroundSize: `${SRC_W * scale}px ${SRC_H * scale}px`,
+        backgroundPosition: `${-MARK.x * scale + (size - MARK.w * scale) / 2}px ${
+          -MARK.y * scale + (size - MARK.h * scale) / 2
+        }px`,
+        backgroundRepeat: 'no-repeat',
+      }}
+      className={`inline-block shrink-0 mix-blend-multiply ${className}`}
+    />
   );
 }

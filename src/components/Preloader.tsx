@@ -32,7 +32,7 @@ export function Preloader() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: 'easeInOut' }}
-          className="fixed inset-0 z-[100] bg-[#061c3a] flex flex-col items-center justify-center gap-7"
+          className="fixed inset-0 z-[100] bg-[#EEF4FC] flex flex-col items-center justify-center gap-7"
           aria-hidden="true"
         >
           <motion.div
@@ -46,7 +46,7 @@ export function Preloader() {
           <div className="flex flex-col items-center gap-3">
             <Logo variant="full" size={30} />
 
-            <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#7f9cc4]">
+            <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-slate-400">
               Loading
             </span>
           </div>
