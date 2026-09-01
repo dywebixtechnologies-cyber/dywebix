@@ -10,10 +10,21 @@ import { Project } from '../types';
 import { CheckCircle, Info, ChevronRight, Laptop, FileCode2, MousePointer2 } from 'lucide-react';
 import { Loader } from './Loader';
 import logoSrc from '../assets/dywebix-logo.png';
+import founderImg from '../assets/team/founder-melwin-anto.png';
+import cofounderImg from '../assets/team/cofounder-saravanan.png';
+import ceoImg from '../assets/team/ceo-mohamed-ibrahim.png';
 
 // The R3F/rapier bundle is heavy, so the ID card is code-split and only mounted
 // once the portfolio section actually scrolls into view.
 const Lanyard = lazy(() => import('./Lanyard'));
+const DepthCarousel = lazy(() => import('./DepthCarousel'));
+
+// Founder, then co-founder, then CEO — the order the cards are shown in.
+const TEAM = [
+  { image: founderImg, alt: 'Melwin Anto — Founder' },
+  { image: cofounderImg, alt: 'Saravanan — Co-Founder' },
+  { image: ceoImg, alt: 'Mohamed Ibrahim — CEO' },
+];
 
 
 export function Portfolio() {
@@ -22,6 +33,8 @@ export function Portfolio() {
   const [viewMode, setViewMode] = useState<'preview' | 'specs'>('preview');
   const cardRef = useRef<HTMLDivElement>(null);
   const cardInView = useInView(cardRef, { once: true, margin: '200px' });
+  const teamRef = useRef<HTMLDivElement>(null);
+  const teamInView = useInView(teamRef, { once: true, margin: '200px' });
 
   const categories = [
     { id: 'all', label: 'All Artifacts' },
@@ -301,6 +314,56 @@ export function Portfolio() {
             )}
           </div>
 
+        </div>
+
+        {/* Team — depth carousel of the founding cards */}
+        <div ref={teamRef} className="mt-20 pt-12 border-t border-slate-200">
+          <div className="max-w-2xl mb-8">
+            <span className="font-mono text-[10px] text-slate-400 uppercase tracking-widest block mb-3">
+              [ 03 / THE TEAM ]
+            </span>
+            <h3 className="font-display font-light text-2xl md:text-4xl tracking-tight text-slate-950 leading-tight">
+              The people behind <span className="font-serif italic font-normal text-slate-500">dywebixtech</span>.
+            </h3>
+            <p className="mt-4 text-slate-500 text-sm leading-relaxed font-light">
+              Drag, scroll or use the arrows to move through the cards.
+            </p>
+          </div>
+
+          <div className="relative h-[460px] sm:h-[540px] lg:h-[600px] rounded-2xl overflow-hidden bg-[radial-gradient(ellipse_at_center,#e2e8f0_0%,transparent_70%)]">
+            {teamInView && (
+              <Suspense
+                fallback={
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Loader size={72} label="Loading the team cards" />
+                  </div>
+                }
+              >
+                <DepthCarousel
+                  items={TEAM}
+                  cardWidth={300}
+                  cardHeight={450}
+                  depth={220}
+                  spread={90}
+                  tilt={22}
+                  tiltDirection="right"
+                  perspective={1400}
+                  visibleCards={3}
+                  falloff={0.2}
+                  blur={6}
+                  radius={18}
+                  tint="#05060a"
+                  duration={700}
+                  ease="power3.out"
+                  autoplay
+                  autoplayDelay={3200}
+                  loop
+                  showControls
+                  showIndicators
+                />
+              </Suspense>
+            )}
+          </div>
         </div>
 
         {/* Interactive 3D studio ID card */}
