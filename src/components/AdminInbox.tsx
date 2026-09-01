@@ -131,7 +131,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
   );
 
   return (
-    <section id="admin-section" className="py-24 px-6 bg-[#F8F9FA] border-t border-slate-200">
+    <section id="admin-section" className="py-24 px-6 bg-[#EEF4FC] border-t border-[#cbdff5]">
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
@@ -140,7 +140,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
             <span className="font-mono text-[10px] text-slate-400 uppercase tracking-widest block mb-3">
               [ 04 / BACKOFFICE INBOX ]
             </span>
-            <h2 className="font-display font-light text-3xl md:text-5xl tracking-tight text-slate-950">
+            <h2 className="font-display font-light text-3xl md:text-5xl tracking-tight text-[#072750]">
               Administrative Inquiry Console.
             </h2>
           </div>
@@ -152,29 +152,29 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
         {/* METRICS ROW (Admin Dashboard) */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
 
-          <div className="bg-white border border-slate-200 p-6 rounded-md shadow-xs flex items-center justify-between">
+          <div className="bg-white border border-[#cbdff5] p-6 rounded-md shadow-xs flex items-center justify-between">
             <div className="space-y-1">
               <span className="font-mono text-[9px] uppercase tracking-widest text-slate-400 block">REGISTERED USERS</span>
-              <span className="font-sans font-bold text-3xl text-slate-900 leading-none block">{userCount}</span>
+              <span className="font-sans font-bold text-3xl text-[#0b3566] leading-none block">{userCount}</span>
               <span className="text-slate-500 text-[10px] block font-light">Client accounts created</span>
             </div>
-            <div className="w-10 h-10 rounded bg-slate-50 flex items-center justify-center border border-slate-200/80">
+            <div className="w-10 h-10 rounded bg-[#eef4fc] flex items-center justify-center border border-slate-200/80">
               <Users className="w-4 h-4 text-slate-600" />
             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 p-6 rounded-md shadow-xs flex items-center justify-between">
+          <div className="bg-white border border-[#cbdff5] p-6 rounded-md shadow-xs flex items-center justify-between">
             <div className="space-y-1">
               <span className="font-mono text-[9px] uppercase tracking-widest text-slate-400 block">TOTAL SUBMISSIONS</span>
-              <span className="font-sans font-bold text-3xl text-slate-900 leading-none block">{totalVolume}</span>
+              <span className="font-sans font-bold text-3xl text-[#0b3566] leading-none block">{totalVolume}</span>
               <span className="text-slate-500 text-[10px] block font-light">Project ideas received</span>
             </div>
-            <div className="w-10 h-10 rounded bg-slate-50 flex items-center justify-center border border-slate-200/80">
+            <div className="w-10 h-10 rounded bg-[#eef4fc] flex items-center justify-center border border-slate-200/80">
               <MessageSquare className="w-4 h-4 text-slate-600" />
             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 p-6 rounded-md shadow-xs flex items-center justify-between">
+          <div className="bg-white border border-[#cbdff5] p-6 rounded-md shadow-xs flex items-center justify-between">
             <div className="space-y-1">
               <span className="font-mono text-[9px] uppercase tracking-widest text-slate-400 block">UNREAD MESSAGES</span>
               <span className="font-sans font-bold text-3xl text-[#10b981] leading-none block flex items-center gap-2">
@@ -190,15 +190,15 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 p-6 rounded-md shadow-xs flex items-center justify-between">
+          <div className="bg-white border border-[#cbdff5] p-6 rounded-md shadow-xs flex items-center justify-between">
             <div className="space-y-1">
               <span className="font-mono text-[9px] uppercase tracking-widest text-slate-400 block">EARNED REVENUE</span>
-              <span className="font-sans font-bold text-3xl text-slate-900 leading-none block">
+              <span className="font-sans font-bold text-3xl text-[#0b3566] leading-none block">
                 ₹{pipelineValue.toLocaleString('en-IN')}
               </span>
               <span className="text-slate-500 text-[10px] block font-light">From finished projects only</span>
             </div>
-            <div className="w-10 h-10 rounded bg-slate-50 flex items-center justify-center border border-slate-200/80">
+            <div className="w-10 h-10 rounded bg-[#eef4fc] flex items-center justify-center border border-slate-200/80">
               <IndianRupee className="w-4 h-4 text-slate-600" />
             </div>
           </div>
@@ -219,7 +219,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                 placeholder="Search name, brief, budget..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full h-11 pl-11 pr-4 border border-slate-200 text-xs rounded-md bg-white focus:border-slate-950 focus:outline-none"
+                className="w-full h-11 pl-11 pr-4 border border-[#cbdff5] text-xs rounded-md bg-white focus:border-slate-950 focus:outline-none"
                 id="admin-search-input"
               />
             </div>
@@ -235,8 +235,8 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                       onClick={() => handleSelectInquiry(inq)}
                       className={`p-4 border rounded-md transition-all cursor-pointer flex flex-col justify-between group relative ${
                         isSelected 
-                          ? 'border-black bg-slate-50 shadow-xs' 
-                          : 'border-slate-200 bg-white hover:border-slate-400'
+                          ? 'border-[#0c6fc2] bg-[#eef4fc] shadow-xs' 
+                          : 'border-[#cbdff5] bg-white hover:border-slate-400'
                       }`}
                       id={`inq-item-${inq.id}`}
                     >
@@ -246,7 +246,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                       )}
 
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="font-mono text-[9px] bg-slate-50 border border-slate-200/80 text-slate-600 px-1.5 py-0.5 rounded">
+                        <span className="font-mono text-[9px] bg-[#eef4fc] border border-slate-200/80 text-slate-600 px-1.5 py-0.5 rounded">
                           {inq.id}
                         </span>
                         <span className="font-mono text-[9px] text-slate-400">
@@ -254,7 +254,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                         </span>
                       </div>
 
-                      <div className="text-sm font-semibold text-slate-900 group-hover:text-black truncate mb-1">
+                      <div className="text-sm font-semibold text-[#0b3566] group-hover:text-[#0c6fc2] truncate mb-1">
                         {inq.name}
                         {inq.company && <span className="text-xs text-slate-500 font-light"> at {inq.company}</span>}
                       </div>
@@ -263,7 +263,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                         {inq.details}
                       </div>
 
-                      <div className="flex items-center justify-between border-t border-slate-100 pt-2 mt-2">
+                      <div className="flex items-center justify-between border-t border-[#dfeaf8] pt-2 mt-2">
                         <span className="text-[10px] font-mono font-medium text-slate-500">
                           {inq.projectType}
                         </span>
@@ -272,7 +272,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={(e) => handleToggleRead(inq.id, e)}
-                            className="p-1 text-slate-400 hover:text-black font-mono text-[9px] uppercase tracking-wide cursor-pointer focus:outline-none"
+                            className="p-1 text-slate-400 hover:text-[#0c6fc2] font-mono text-[9px] uppercase tracking-wide cursor-pointer focus:outline-none"
                             title={inq.read ? 'Mark as Unread' : 'Mark as Read'}
                             id={`toggle-read-btn-${inq.id}`}
                           >
@@ -293,7 +293,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                   );
                 })
               ) : (
-                <div className="text-center py-12 border border-dashed border-slate-200 rounded text-slate-400 font-mono text-xs">
+                <div className="text-center py-12 border border-dashed border-[#cbdff5] rounded text-slate-400 font-mono text-xs">
                   No submissions match search terms.
                 </div>
               )}
@@ -302,7 +302,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
           </div>
 
           {/* RIGHT DETAIL CARD PANEL - 7 Columns */}
-          <div className="lg:col-span-7 bg-white border border-slate-200 p-8 rounded-md shadow-xs min-h-[460px]">
+          <div className="lg:col-span-7 bg-white border border-[#cbdff5] p-8 rounded-md shadow-xs min-h-[460px]">
             <AnimatePresence mode="wait">
               {selectedInquiry ? (
                 <motion.div
@@ -315,7 +315,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                 >
                   
                   {/* Header info */}
-                  <div className="space-y-1.5 border-b border-slate-100 pb-4">
+                  <div className="space-y-1.5 border-b border-[#dfeaf8] pb-4">
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-[9px] text-slate-400">INSPECTING BLUEPRINT</span>
                       <div className="flex items-center gap-2">
@@ -328,10 +328,10 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                             <CheckCircle className="w-3 h-3" /> Accepted
                           </span>
                         ) : null}
-                        <span className="font-mono text-[9px] bg-black text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider">{selectedInquiry.id}</span>
+                        <span className="font-mono text-[9px] bg-[#0c6fc2] text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider">{selectedInquiry.id}</span>
                       </div>
                     </div>
-                    <h3 className="font-sans font-semibold text-2xl text-slate-950 tracking-tight leading-none mt-2">
+                    <h3 className="font-sans font-semibold text-2xl text-[#072750] tracking-tight leading-none mt-2">
                        {selectedInquiry.name}
                     </h3>
                     <div className="text-slate-500 font-mono text-xs flex flex-wrap items-center gap-3">
@@ -346,24 +346,24 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                   </div>
 
                   {/* Logistics Specs Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#F8F9FA] p-4 rounded border border-slate-200 font-mono text-xs text-slate-600">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#EEF4FC] p-4 rounded border border-[#cbdff5] font-mono text-xs text-slate-600">
                     <div className="space-y-1.5">
                       <span className="text-[9px] text-slate-400 block uppercase tracking-wider">Scope Architecture</span>
-                      <span className="text-slate-900 font-medium block">{selectedInquiry.projectType}</span>
+                      <span className="text-[#0b3566] font-medium block">{selectedInquiry.projectType}</span>
                     </div>
                     <div className="space-y-1.5">
                       <span className="text-[9px] text-slate-400 block uppercase tracking-wider">Logged On</span>
-                      <span className="text-slate-900 font-medium block">
+                      <span className="text-[#0b3566] font-medium block">
                         {new Date(selectedInquiry.timestamp).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
                       </span>
                     </div>
                   </div>
 
                   {/* Order Management — set / edit the project rate */}
-                  <div className="bg-white border border-slate-200 rounded p-4 space-y-2">
+                  <div className="bg-white border border-[#cbdff5] rounded p-4 space-y-2">
                     <span className="font-mono text-[9px] text-slate-400 uppercase tracking-wider block">Project Rate (visible to the client)</span>
                     <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-1.5 flex-1 border border-slate-200 rounded px-3 h-10 bg-[#F8F9FA]/40 focus-within:border-slate-950 transition-colors">
+                      <div className="flex items-center gap-1.5 flex-1 border border-[#cbdff5] rounded px-3 h-10 bg-[#EEF4FC]/40 focus-within:border-slate-950 transition-colors">
                         <IndianRupee className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                         <input
                           type="text"
@@ -371,13 +371,13 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                           placeholder="e.g. 2,50,000"
                           value={rateDraft}
                           onChange={(e) => setRateDraft(e.target.value)}
-                          className="flex-1 bg-transparent text-sm text-slate-900 focus:outline-none"
+                          className="flex-1 bg-transparent text-sm text-[#0b3566] focus:outline-none"
                           id="inq-rate-input"
                         />
                       </div>
                       <button
                         onClick={() => handleSetRate(selectedInquiry.id)}
-                        className="rounded bg-black text-white text-[10px] font-mono tracking-widest uppercase px-4 h-10 hover:bg-slate-900 transition-all cursor-pointer"
+                        className="rounded bg-[#0c6fc2] text-white text-[10px] font-mono tracking-widest uppercase px-4 h-10 hover:bg-[#072750] transition-all cursor-pointer"
                         id="inq-set-rate-btn"
                       >
                         Save
@@ -393,13 +393,13 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                   {/* Body Client specs brief */}
                   <div className="flex-1 space-y-2">
                     <span className="font-mono text-[9px] uppercase tracking-widest text-slate-400 block">PROJECT SCOPE SPECIFICATION SUMMARY:</span>
-                    <div className="p-5 border border-slate-200 rounded text-sm text-slate-700 leading-relaxed font-light whitespace-pre-wrap">
+                    <div className="p-5 border border-[#cbdff5] rounded text-sm text-slate-700 leading-relaxed font-light whitespace-pre-wrap">
                       {selectedInquiry.details}
                     </div>
                   </div>
 
                   {/* Actions Drawer */}
-                  <div className="border-t border-slate-100 pt-6 flex flex-wrap items-center justify-between gap-4">
+                  <div className="border-t border-[#dfeaf8] pt-6 flex flex-wrap items-center justify-between gap-4">
                     <div className="flex flex-wrap gap-3">
                       <button
                         onClick={(e) => handleToggleAccept(selectedInquiry.id, e)}
@@ -429,7 +429,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                       )}
                       <button
                         onClick={(e) => handleToggleRead(selectedInquiry.id, e)}
-                        className="flex items-center gap-1.5 border border-slate-200 rounded px-4 py-2 hover:bg-slate-50 font-mono text-xs text-slate-600 transition-all cursor-pointer"
+                        className="flex items-center gap-1.5 border border-[#cbdff5] rounded px-4 py-2 hover:bg-[#eef4fc] font-mono text-xs text-slate-600 transition-all cursor-pointer"
                         id="inq-read-toggle-btn-pane"
                       >
                         <CheckSquare className="w-4 h-4 text-slate-400" />
@@ -437,7 +437,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
                       </button>
                       <button
                         onClick={(e) => handleDelete(selectedInquiry.id, e)}
-                        className="flex items-center gap-1.5 border border-slate-200 hover:border-red-400 hover:text-red-500 hover:bg-red-50/10 rounded px-4 py-2 font-mono text-xs text-slate-600 transition-all cursor-pointer"
+                        className="flex items-center gap-1.5 border border-[#cbdff5] hover:border-red-400 hover:text-red-500 hover:bg-red-50/10 rounded px-4 py-2 font-mono text-xs text-slate-600 transition-all cursor-pointer"
                         id="inq-delete-btn-pane"
                       >
                         <Trash2 className="w-4 h-4 text-slate-400 group-hover:text-red-500" />
@@ -447,7 +447,7 @@ export function AdminInbox({ onInquiryCountChange }: AdminInboxProps) {
 
                     <a
                       href={`mailto:${selectedInquiry.email}?subject=dywebixtech Service Quote Receipt #${selectedInquiry.id}`}
-                      className="rounded bg-black hover:bg-slate-900 text-white text-xs font-mono tracking-widest uppercase py-3.5 px-6 flex items-center justify-center gap-2 cursor-pointer transition-all"
+                      className="rounded bg-[#0c6fc2] hover:bg-[#072750] text-white text-xs font-mono tracking-widest uppercase py-3.5 px-6 flex items-center justify-center gap-2 cursor-pointer transition-all"
                       id="inq-reply-email-btn"
                     >
                       Draft Reply Message <ArrowRight className="w-3.5 h-3.5" />

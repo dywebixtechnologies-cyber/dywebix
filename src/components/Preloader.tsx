@@ -32,7 +32,7 @@ export function Preloader() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: 'easeInOut' }}
-          className="fixed inset-0 z-[100] bg-[#F8F9FA] flex flex-col items-center justify-center gap-7"
+          className="fixed inset-0 z-[100] bg-[#EEF4FC] flex flex-col items-center justify-center gap-7"
           aria-hidden="true"
         >
           <motion.div

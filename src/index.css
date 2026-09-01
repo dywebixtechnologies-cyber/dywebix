@@ -2,6 +2,19 @@
 @import "tailwindcss";
 
 @theme {
+  /* Brand palette, sampled from the logo artwork:
+     #0C6FC2 is the "dw" mark, #072750 the wordmark. Everything else is a
+     ramp derived from those two so tints stay in the same blue family. */
+  --color-brand: #0c6fc2;
+  --color-brand-bright: #1a86e0;
+  --color-brand-deep: #072750;
+  --color-brand-ink: #041a37;
+
+  /* Surfaces. --surface is the page ground; --surface-tint is the soft blue
+     wash that replaces the old near-white #EEF4FC. */
+  --color-surface: #eef4fc;
+  --color-surface-tint: #dfeaf8;
+
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", sans-serif;
   --font-serif: "Playfair Display", Georgia, serif;
@@ -11,7 +24,7 @@
 /* Custom smooth scrolling */
 html {
   scroll-behavior: smooth;
-  background-color: #F8F9FA;
+  background-color: #EEF4FC;
 }
 
 /* Sub-millisecond glass styling overrides */
