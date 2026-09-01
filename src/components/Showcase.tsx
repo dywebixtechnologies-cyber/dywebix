@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
-import { motion } from 'motion/react';
-import { Zap, MonitorSmartphone, ShieldCheck, ArrowUpRight } from 'lucide-react';
-import CardSwapRaw, { Card as CardRaw } from './CardSwap';
-
-// CardSwap/Card are untyped JS components — alias to `any` for clean JSX usage.
-const CardSwap: any = CardSwapRaw;
-const Card: any = CardRaw;
+import React, { Suspense, lazy, useRef } from 'react';
+import { motion, useInView } from 'motion/react';
+import { Zap, MonitorSmartphone, ShieldCheck } from 'lucide-react';
+// GSAP only exists for this card stack, so it is split out and mounted when
+// the section scrolls into view rather than shipped in the main bundle.
+const ShowcaseCards = lazy(() => import('./ShowcaseCards'));
 
 const CARDS = [
   {
@@ -34,6 +32,9 @@ const CARDS = [
 ];
 
 export function Showcase() {
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const cardsInView = useInView(cardsRef, { once: true, margin: '200px' });
+
   return (
     <section className="relative py-24 md:py-32 px-6 bg-[#F8F9FA] border-t border-slate-200 overflow-hidden">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
@@ -68,31 +69,12 @@ export function Showcase() {
         </motion.div>
 
         {/* Right: swapping 3D cards */}
-        <div className="relative h-[420px] sm:h-[520px] lg:h-[600px]">
-          {/* easing="power" picks CardSwap's 0.8s tweens; the default elastic
-              ones run 2s and would still be moving when the next swap fires. */}
-          <CardSwap cardDistance={60} verticalDistance={70} delay={2000} easing="power" pauseOnHover>
-            {CARDS.map((c) => (
-              <Card
-                key={c.tag}
-                className="p-8 flex flex-col justify-between text-white"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-white/50">{c.tag}</span>
-                  <c.icon className="w-5 h-5 text-white/80" />
-                </div>
-                <div>
-                  <h3 className="font-display font-medium text-2xl md:text-[1.75rem] tracking-tight leading-tight">
-                    {c.title}
-                  </h3>
-                  <p className="mt-3 text-sm text-white/60 font-light leading-relaxed">{c.text}</p>
-                </div>
-                <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-white/70">
-                  dywebixtech <ArrowUpRight className="w-3.5 h-3.5" />
-                </div>
-              </Card>
-            ))}
-          </CardSwap>
+        <div ref={cardsRef} className="relative h-[420px] sm:h-[520px] lg:h-[600px]">
+          {cardsInView && (
+            <Suspense fallback={null}>
+              <ShowcaseCards cards={CARDS} />
+            </Suspense>
+          )}
         </div>
       </div>
     </section>

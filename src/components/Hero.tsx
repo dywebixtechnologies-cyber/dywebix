@@ -3,20 +3,41 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowDownRight, Shield, Zap, MonitorSmartphone } from 'lucide-react';
-import MagicRings from './MagicRings';
+// three.js is roughly two thirds of the main bundle and this background is
+// purely decorative, so it is split out and mounted after first paint.
+const MagicRings = lazy(() => import('./MagicRings'));
 
 interface HeroProps {
   onSectionChange: (section: string) => void;
 }
 
 export function Hero({ onSectionChange }: HeroProps) {
+  // Hold the WebGL background back until the browser is idle, so the hero
+  // text and buttons paint and respond without waiting on three.js.
+  const [showRings, setShowRings] = useState(false);
+
+  useEffect(() => {
+    const w = window as unknown as {
+      requestIdleCallback?: (cb: () => void) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (w.requestIdleCallback) {
+      const id = w.requestIdleCallback(() => setShowRings(true));
+      return () => w.cancelIdleCallback?.(id);
+    }
+    const t = setTimeout(() => setShowRings(true), 300);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <section className="relative min-h-screen min-h-[100svh] pt-28 sm:pt-32 pb-16 sm:pb-20 px-6 flex flex-col justify-between overflow-hidden bg-[#F8F9FA]">
       {/* Animated WebGL magic-rings background */}
       <div className="absolute inset-0 z-0 pointer-events-none [mask-image:radial-gradient(ellipse_72%_72%_at_50%_45%,#000_52%,transparent_88%)]">
+        {showRings && (
+        <Suspense fallback={null}>
         <MagicRings
           color="#A855F7"
           colorTwo="#6366F1"
@@ -40,6 +61,8 @@ export function Hero({ onSectionChange }: HeroProps) {
           parallax={0.05}
           clickBurst={false}
         />
+        </Suspense>
+        )}
       </div>
 
       {/* Decorative clean grid patterns (Minimalist aesthetic) */}
