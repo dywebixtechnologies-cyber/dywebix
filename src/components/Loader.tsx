@@ -66,7 +66,7 @@ export function Loader({
  */
 export function PageLoader({ label = 'Loading' }: { label?: string }) {
   return (
-    <div className="min-h-screen bg-[#EEF4FC] flex flex-col items-center justify-center gap-8">
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col items-center justify-center gap-8">
       <Loader size={96} label={label} />
       <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-slate-400">
         {label}

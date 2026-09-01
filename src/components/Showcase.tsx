@@ -36,7 +36,7 @@ export function Showcase() {
   const cardsInView = useInView(cardsRef, { once: true, margin: '200px' });
 
   return (
-    <section className="relative py-24 md:py-32 px-6 bg-[#EEF4FC] border-t border-[#cbdff5] overflow-hidden">
+    <section className="relative py-24 md:py-32 px-6 bg-[#F8F9FA] border-t border-slate-200 overflow-hidden">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
         {/* Left: copy */}
         <motion.div
@@ -48,7 +48,7 @@ export function Showcase() {
           <span className="font-sans text-xs text-slate-400 uppercase tracking-[0.08em] block mb-3">
             Why dywebixtech
           </span>
-          <h2 className="font-display font-light text-3xl md:text-5xl tracking-tight text-[#072750] leading-[1.1]">
+          <h2 className="font-display font-light text-3xl md:text-5xl tracking-tight text-slate-950 leading-[1.1]">
             Three pillars behind <span className="font-serif italic font-normal text-slate-500">every build</span>.
           </h2>
           <p className="mt-6 text-slate-600 text-base md:text-lg leading-relaxed font-light max-w-lg">
@@ -59,7 +59,7 @@ export function Showcase() {
           <ul className="mt-8 flex flex-col gap-3">
             {CARDS.map((c) => (
               <li key={c.tag} className="flex items-center gap-3 text-sm text-slate-700 font-light">
-                <span className="w-7 h-7 rounded-full border border-[#cbdff5] bg-white flex items-center justify-center text-slate-700 shrink-0">
+                <span className="w-7 h-7 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-700 shrink-0">
                   <c.icon className="w-3.5 h-3.5" />
                 </span>
                 {c.title}

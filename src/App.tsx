@@ -129,7 +129,7 @@ export default function App() {
   } else {
     viewKey = 'home';
     view = (
-    <div className="bg-[#EEF4FC] text-[#0b3566] min-h-screen selection:bg-[#0c6fc2] selection:text-white font-sans antialiased">
+    <div className="bg-[#F8F9FA] text-slate-900 min-h-screen selection:bg-black selection:text-white font-sans antialiased">
 
       {/* Dynamic Header Navbar */}
       <Navigation
@@ -171,8 +171,8 @@ export default function App() {
       </main>
 
       {/* FOOTER SECTION: Minimalist Design-Forward Panel */}
-      <footer className="bg-[#041a37] text-[#9dc0e8] border-t border-[#0b3566] py-16 px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 border-b border-[#0b3566] pb-12">
+      <footer className="bg-stone-950 text-stone-400 border-t border-stone-900 py-16 px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 border-b border-stone-900 pb-12">
           
           {/* Logo Brand Descriptor (Columns 1-4) */}
           <div className="md:col-span-4 space-y-4">
@@ -181,7 +181,7 @@ export default function App() {
                 <Logo variant="full" size={28} />
               </div>
             </div>
-            <p className="font-sans text-xs text-[#7fa9dc] leading-relaxed font-light max-w-sm">
+            <p className="font-sans text-xs text-stone-500 leading-relaxed font-light max-w-sm">
               An engineering-forward studio dedicated to building high-performance, minimalist web interfaces. Handcrafted logic, clean frameworks, maximum conversions.
             </p>
           </div>
@@ -189,25 +189,25 @@ export default function App() {
           {/* Quick Sitemap Links (Columns 5-8) */}
           <div className="md:col-span-4 grid grid-cols-2 gap-8">
             <div className="space-y-4">
-              <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#5f8cc4] font-bold block">NAVIGATION</span>
+              <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-stone-600 font-bold block">NAVIGATION</span>
               <ul className="space-y-2.5 text-xs">
                  <li>
-                  <button onClick={() => handleSectionChange('services')} className="hover:text-[#dfeaf8] transition-colors cursor-pointer">
+                  <button onClick={() => handleSectionChange('services')} className="hover:text-stone-200 transition-colors cursor-pointer">
                     Services Offered
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleSectionChange('portfolio')} className="hover:text-[#dfeaf8] transition-colors cursor-pointer">
+                  <button onClick={() => handleSectionChange('portfolio')} className="hover:text-stone-200 transition-colors cursor-pointer">
                     Portfolio Gallery
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => { window.location.hash = '#about'; }} className="hover:text-[#dfeaf8] transition-colors cursor-pointer">
+                  <button onClick={() => { window.location.hash = '#about'; }} className="hover:text-stone-200 transition-colors cursor-pointer">
                     About Us
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleSectionChange('contact')} className="hover:text-[#dfeaf8] transition-colors cursor-pointer">
+                  <button onClick={() => handleSectionChange('contact')} className="hover:text-stone-200 transition-colors cursor-pointer">
                     Start Estimator
                   </button>
                 </li>
@@ -215,8 +215,8 @@ export default function App() {
             </div>
 
             <div className="space-y-4">
-              <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#5f8cc4] font-bold block">CAPABILITIES</span>
-              <ul className="space-y-2 text-xs font-light text-[#7fa9dc]">
+              <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-stone-600 font-bold block">CAPABILITIES</span>
+              <ul className="space-y-2 text-xs font-light text-stone-500">
                 <li>Dynamic React Hooks</li>
                 <li>Tailwind Utility Art</li>
                 <li>Lighthouse 100 Speed</li>
@@ -227,18 +227,18 @@ export default function App() {
 
           {/* Business Hours / Technical Meta (Columns 9-12) */}
           <div className="md:col-span-4 space-y-4">
-            <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#5f8cc4] font-bold block">STUDIO DETAILS</span>
+            <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-stone-600 font-bold block">STUDIO DETAILS</span>
             <div className="space-y-3 font-sans text-[10.5px]">
               <div className="flex items-center gap-2">
-                <Clock className="w-3.5 h-3.5 text-[#5f8cc4]" />
+                <Clock className="w-3.5 h-3.5 text-stone-600" />
                 <span>Response Time: &lt; 3 Hours</span>
               </div>
               <div className="flex items-center gap-2">
-                <Monitor className="w-3.5 h-3.5 text-[#5f8cc4]" />
+                <Monitor className="w-3.5 h-3.5 text-stone-600" />
                 <span>Hosting: High-velocity CDN</span>
               </div>
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#5f8cc4]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-stone-600" />
                 <span>Licensed: Apache-2.0 Secure</span>
               </div>
             </div>
@@ -247,11 +247,11 @@ export default function App() {
         </div>
 
         {/* Copyright Panel */}
-        <div className="max-w-7xl mx-auto pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#5f8cc4]">
+        <div className="max-w-7xl mx-auto pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-600">
           <p>© {new Date().getFullYear()} dywebixtech. All rights reserved.</p>
           <div className="flex items-center gap-1.5 font-light">
             <span>Made with precision by a</span>
-            <Heart className="w-3.5 h-3.5 text-[#7fa9dc] hover:text-[#dfeaf8] transition-colors duration-200 scale-100 hover:scale-110 cursor-pointer" />
+            <Heart className="w-3.5 h-3.5 text-stone-500 hover:text-stone-200 transition-colors duration-200 scale-100 hover:scale-110 cursor-pointer" />
             <span>Developer</span>
           </div>
         </div>

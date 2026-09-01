@@ -162,7 +162,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
   };
 
   return (
-    <section id="contact-section" className="py-24 px-6 bg-[#EEF4FC] border-t border-[#cbdff5]">
+    <section id="contact-section" className="py-24 px-6 bg-[#F8F9FA] border-t border-slate-200">
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
@@ -171,7 +171,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
             <span className="font-sans text-xs text-slate-400 uppercase tracking-[0.08em] block mb-3">
               Start a project
             </span>
-            <h2 className="font-display font-light text-3xl md:text-5xl tracking-tight text-[#072750]">
+            <h2 className="font-display font-light text-3xl md:text-5xl tracking-tight text-slate-950">
               Co-produce your design blueprint.
             </h2>
 
@@ -195,12 +195,12 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
 
         {/* Login gate — visitors must sign in before sharing an idea */}
         {!user ? (
-          <div className="bg-white border border-[#cbdff5] rounded-md shadow-xs p-12 text-center flex flex-col items-center gap-5 max-w-xl mx-auto">
-            <div className="w-14 h-14 rounded-full bg-[#041a37] flex items-center justify-center text-white">
+          <div className="bg-white border border-slate-200 rounded-md shadow-xs p-12 text-center flex flex-col items-center gap-5 max-w-xl mx-auto">
+            <div className="w-14 h-14 rounded-full bg-slate-950 flex items-center justify-center text-white">
               <LogIn className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-sans font-semibold text-xl text-[#072750] tracking-tight">Log in to share your idea</h3>
+              <h3 className="font-sans font-semibold text-xl text-slate-950 tracking-tight">Log in to share your idea</h3>
               <p className="text-slate-500 text-sm font-light mt-2 max-w-sm mx-auto leading-relaxed">
                 Create a free account or sign in first. Your project ideas are saved to your dashboard so you can track their progress.
               </p>
@@ -208,7 +208,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full justify-center">
               <a
                 href="#login"
-                className="rounded-full bg-[#0c6fc2] text-white h-12 px-7 flex items-center justify-center gap-2 font-sans text-xs tracking-[0.08em] uppercase hover:bg-[#072750] transition-all cursor-pointer w-full sm:w-auto"
+                className="rounded-full bg-black text-white h-12 px-7 flex items-center justify-center gap-2 font-sans text-xs tracking-[0.08em] uppercase hover:bg-slate-900 transition-all cursor-pointer w-full sm:w-auto"
               >
                 <LogIn className="w-4 h-4" /> Log in to continue
               </a>
@@ -216,7 +216,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={googleBusy}
-                className="rounded-full border border-[#cbdff5] bg-white hover:bg-[#eef4fc] transition-colors flex items-center justify-center gap-3 text-xs font-semibold text-slate-700 cursor-pointer h-12 px-7 disabled:opacity-45 disabled:cursor-not-allowed w-full sm:w-auto"
+                className="rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-center gap-3 text-xs font-semibold text-slate-700 cursor-pointer h-12 px-7 disabled:opacity-45 disabled:cursor-not-allowed w-full sm:w-auto"
                 id="contact-google-btn"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
@@ -235,7 +235,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start" id="planner-form-holder">
           
           {/* LEFT SIDE: Interactive Form Slots - 7 Columns */}
-          <div className="lg:col-span-7 bg-white border border-[#cbdff5] p-8 rounded-md shadow-xs">
+          <div className="lg:col-span-7 bg-white border border-slate-200 p-8 rounded-md shadow-xs">
             
             <AnimatePresence mode="wait">
               {!submissionReceipt ? (
@@ -250,7 +250,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                   
                   {/* Step 1: Basic Personals */}
                   <div className="space-y-6">
-                    <h3 className="font-sans text-xs uppercase tracking-[0.08em] text-[#0b3566] border-b border-[#dfeaf8] pb-2">
+                    <h3 className="font-sans text-xs uppercase tracking-[0.08em] text-slate-900 border-b border-slate-100 pb-2">
                       01 / Client Profile
                     </h3>
                     
@@ -263,8 +263,8 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                           placeholder="e.g. Sarah Connor"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
-                          className={`h-11 px-4 border text-sm rounded bg-[#EEF4FC]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none ${
-                            errors.name ? 'border-red-500' : 'border-[#cbdff5]'
+                          className={`h-11 px-4 border text-sm rounded bg-[#F8F9FA]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none ${
+                            errors.name ? 'border-red-500' : 'border-slate-200'
                           }`}
                         />
                         {errors.name && <span className="text-xs text-red-500 font-sans mt-1">{errors.name}</span>}
@@ -278,8 +278,8 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                           placeholder="e.g. sarah@example.com"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className={`h-11 px-4 border text-sm rounded bg-[#EEF4FC]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none ${
-                            errors.email ? 'border-red-500' : 'border-[#cbdff5]'
+                          className={`h-11 px-4 border text-sm rounded bg-[#F8F9FA]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none ${
+                            errors.email ? 'border-red-500' : 'border-slate-200'
                           }`}
                         />
                         {errors.email && <span className="text-xs text-red-500 font-sans mt-1">{errors.email}</span>}
@@ -294,14 +294,14 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                         placeholder="e.g. Cyberdyne Labs"
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
-                        className="h-11 px-4 border border-[#cbdff5] text-sm rounded bg-[#EEF4FC]/40 focus:bg-white focus:border-slate-950 focus:outline-none"
+                        className="h-11 px-4 border border-slate-200 text-sm rounded bg-[#F8F9FA]/40 focus:bg-white focus:border-slate-950 focus:outline-none"
                       />
                     </div>
                   </div>
 
                   {/* Step 2: System Specs Selection */}
                   <div className="space-y-6">
-                    <h3 className="font-sans text-xs uppercase tracking-[0.08em] text-[#0f172a] border-b border-[#dfeaf8] pb-2">
+                    <h3 className="font-sans text-xs uppercase tracking-[0.08em] text-[#0f172a] border-b border-slate-100 pb-2">
                       02 / System & Structure Scope
                     </h3>
                     
@@ -313,14 +313,14 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                         placeholder="e.g. A marketing landing page with a blog, or a React-based SaaS dashboard with user accounts..."
                         value={projectType}
                         onChange={(e) => setProjectType(e.target.value)}
-                        className="p-4 border border-[#cbdff5] text-sm rounded bg-[#EEF4FC]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none resize-none"
+                        className="p-4 border border-slate-200 text-sm rounded bg-[#F8F9FA]/40 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none resize-none"
                       />
                     </div>
                   </div>
 
                   {/* Step 4: Notes Summary */}
                   <div className="space-y-6">
-                    <h3 className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[#0b3566] border-b border-[#dfeaf8] pb-2">
+                    <h3 className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-slate-900 border-b border-slate-100 pb-2">
                       04 / Custom Specs & Specifications
                     </h3>
                     
@@ -332,8 +332,8 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                         placeholder="e.g. Please describe your service, main objectives, list reference websites you love, or describe core animations wanted..."
                         value={details}
                         onChange={(e) => setDetails(e.target.value)}
-                        className={`p-4 border text-sm rounded bg-[#EEF4FC]/60 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none resize-none ${
-                          errors.details ? 'border-red-500' : 'border-[#cbdff5]'
+                        className={`p-4 border text-sm rounded bg-[#F8F9FA]/60 focus:bg-white transition-colors focus:border-slate-950 focus:outline-none resize-none ${
+                          errors.details ? 'border-red-500' : 'border-slate-200'
                         }`}
                       />
                       {errors.details && <span className="text-xs text-red-500 font-sans mt-1">{errors.details}</span>}
@@ -347,7 +347,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex items-center justify-center gap-3 rounded-md bg-[#0c6fc2] h-14 text-white text-xs font-sans tracking-[0.08em] uppercase transition-all hover:bg-[#072750] disabled:opacity-50 cursor-pointer"
+                    className="w-full flex items-center justify-center gap-3 rounded-md bg-black h-14 text-white text-xs font-sans tracking-[0.08em] uppercase transition-all hover:bg-slate-900 disabled:opacity-50 cursor-pointer"
                     id="submit-engineer-brief-btn"
                   >
                     {isSubmitting ? (
@@ -370,12 +370,12 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                   exit={{ opacity: 0 }}
                   className="py-12 text-center flex flex-col items-center gap-6"
                 >
-                  <div className="w-16 h-16 rounded-full bg-[#eef4fc] inline-flex items-center justify-center text-[#0b3566] border border-[#cbdff5]">
+                  <div className="w-16 h-16 rounded-full bg-slate-50 inline-flex items-center justify-center text-slate-900 border border-slate-200">
                     <CheckCircle2 className="w-8 h-8 text-[#10b981]" />
                   </div>
                   
                   <div>
-                    <h3 className="font-sans font-semibold text-2xl text-[#072750] tracking-tight leading-none mb-2">
+                    <h3 className="font-sans font-semibold text-2xl text-slate-950 tracking-tight leading-none mb-2">
                       Inquiry Logged Successfully
                     </h3>
                     <p className="text-slate-500 text-sm max-w-sm mx-auto font-light leading-relaxed">
@@ -383,9 +383,9 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
                     </p>
                   </div>
 
-                  <div className="p-5 bg-[#eef4fc] rounded border border-slate-200/60 w-full max-w-sm text-center">
+                  <div className="p-5 bg-slate-50 rounded border border-slate-200/60 w-full max-w-sm text-center">
                     <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-slate-400 block">SPECIFICATION ID RECEIPT</span>
-                    <span className="font-sans font-bold text-base text-[#0b3566] select-all block mt-1 tracking-wider">
+                    <span className="font-sans font-bold text-base text-slate-900 select-all block mt-1 tracking-wider">
                       {submissionReceipt}
                     </span>
                     <span className="font-sans text-xs text-[#10b981] font-semibold block mt-3">
@@ -395,7 +395,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
 
                   <button
                     onClick={() => setSubmissionReceipt(null)}
-                    className="mt-4 flex items-center gap-2 font-sans text-xs text-slate-500 hover:text-[#0c6fc2] font-semibold border-b border-slate-300 pb-0.5 cursor-pointer"
+                    className="mt-4 flex items-center gap-2 font-sans text-xs text-slate-500 hover:text-black font-semibold border-b border-slate-300 pb-0.5 cursor-pointer"
                     id="submit-another-brief-btn"
                   >
                     Log another system blueprint
@@ -409,7 +409,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
           {/* RIGHT SIDE: Dynamic Draft Output - 5 Columns */}
           <div className="lg:col-span-5 flex flex-col gap-4">
             
-            <div className="bg-[#041a37] text-slate-300 rounded p-6 font-sans text-xs border border-slate-900 flex flex-col h-full justify-between" id="dynamic-summary-draft-box">
+            <div className="bg-slate-950 text-slate-300 rounded p-6 font-sans text-xs border border-slate-900 flex flex-col h-full justify-between" id="dynamic-summary-draft-box">
               
               {/* Header */}
               <div className="border-b border-slate-900 pb-4 mb-4 flex items-center justify-between">
@@ -421,7 +421,7 @@ export function ContactForm({ selectedPresetService, onInquirySubmitted }: Conta
               <div className="space-y-4 flex-1">
                 <div>
                   <span className="text-slate-600 uppercase tracking-[0.08em] block font-semibold text-[11px] mb-1">CLIENT PROFILE:</span>
-                  <div className="text-[#EEF4FC] text-[11px] leading-relaxed">
+                  <div className="text-[#F8F9FA] text-[11px] leading-relaxed">
                     {name.trim() ? name.trim() : <span className="text-slate-700 italic">No name provided</span>}
                     {email.trim() && <span> &lt;{email.trim()}&gt;</span>}
                     {company.trim() && <span className="text-slate-500 font-normal"> at {company.trim()}</span>}

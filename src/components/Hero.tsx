@@ -33,14 +33,14 @@ export function Hero({ onSectionChange }: HeroProps) {
   }, []);
 
   return (
-    <section className="relative min-h-screen min-h-[100svh] pt-28 sm:pt-32 pb-16 sm:pb-20 px-6 flex flex-col justify-between overflow-hidden bg-[#EEF4FC]">
+    <section className="relative min-h-screen min-h-[100svh] pt-28 sm:pt-32 pb-16 sm:pb-20 px-6 flex flex-col justify-between overflow-hidden bg-[#F8F9FA]">
       {/* Animated WebGL magic-rings background */}
       <div className="absolute inset-0 z-0 pointer-events-none [mask-image:radial-gradient(ellipse_72%_72%_at_50%_45%,#000_52%,transparent_88%)]">
         {showRings && (
         <Suspense fallback={null}>
         <MagicRings
-          color="#0c6fc2"
-          colorTwo="#1a86e0"
+          color="#A855F7"
+          colorTwo="#6366F1"
           ringCount={6}
           speed={1}
           attenuation={10}
@@ -83,7 +83,7 @@ export function Hero({ onSectionChange }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-display font-light text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight text-[#072750] leading-[1.08]"
+            className="font-display font-light text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight text-slate-950 leading-[1.08]"
           >
             Exceptional <span className="font-serif italic font-normal text-slate-500">web building</span> <br className="hidden md:block" />
             for system visionaries.
@@ -110,14 +110,14 @@ export function Hero({ onSectionChange }: HeroProps) {
         >
           <button
             onClick={() => onSectionChange('contact')}
-            className="flex items-center justify-center gap-3 rounded-full bg-[#0c6fc2] h-13 px-8 text-white hover:bg-[#072750] font-sans text-xs tracking-[0.08em] uppercase transition-all hover:gap-4 hover:shadow-lg cursor-pointer"
+            className="flex items-center justify-center gap-3 rounded-full bg-black h-13 px-8 text-white hover:bg-slate-900 font-sans text-xs tracking-[0.08em] uppercase transition-all hover:gap-4 hover:shadow-lg cursor-pointer"
             id="hero-cta-contact"
           >
             Start Your Builder Planner <ArrowDownRight className="w-4 h-4" />
           </button>
           <button
             onClick={() => onSectionChange('portfolio')}
-            className="flex items-center justify-center gap-3 rounded-full bg-white border border-[#cbdff5] h-13 px-8 text-slate-800 hover:bg-[#eef4fc] font-sans text-xs tracking-[0.08em] uppercase transition-all cursor-pointer shadow-xs"
+            className="flex items-center justify-center gap-3 rounded-full bg-white border border-slate-200 h-13 px-8 text-slate-800 hover:bg-slate-50 font-sans text-xs tracking-[0.08em] uppercase transition-all cursor-pointer shadow-xs"
             id="hero-cta-portfolio"
           >
             Browse Architecture Gallery
@@ -129,10 +129,10 @@ export function Hero({ onSectionChange }: HeroProps) {
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 relative z-10">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full border border-[#cbdff5] flex items-center justify-center text-slate-800 bg-white">
+            <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-800 bg-white">
               <Zap className="w-4 h-4 text-slate-700" />
             </div>
-            <h3 className="font-sans text-xs uppercase tracking-[0.08em] text-[#0b3566] font-semibold">Sub-0.9s Page Load</h3>
+            <h3 className="font-sans text-xs uppercase tracking-[0.08em] text-slate-900 font-semibold">Sub-0.9s Page Load</h3>
           </div>
           <p className="text-xs text-slate-500 leading-relaxed pl-11 font-light">
             Zero bloat, hand-tuned bundle sizes, and optimal caching policies to score a perfect 100 on Google Lighthouse.
@@ -141,10 +141,10 @@ export function Hero({ onSectionChange }: HeroProps) {
 
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full border border-[#cbdff5] flex items-center justify-center text-slate-800 bg-white">
+            <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-800 bg-white">
               <MonitorSmartphone className="w-4 h-4 text-slate-700" />
             </div>
-            <h3 className="font-sans text-xs uppercase tracking-[0.08em] text-[#0b3566] font-semibold">Pixel-Perfect Layouts</h3>
+            <h3 className="font-sans text-xs uppercase tracking-[0.08em] text-slate-900 font-semibold">Pixel-Perfect Layouts</h3>
           </div>
           <p className="text-xs text-slate-500 leading-relaxed pl-11 font-light">
             Tailored visual layouts scaling fluidly across absolute screens—from compact mobile tabs to expansive 5K studio monitors.
@@ -153,10 +153,10 @@ export function Hero({ onSectionChange }: HeroProps) {
 
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full border border-[#cbdff5] flex items-center justify-center text-slate-800 bg-white">
+            <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-800 bg-white">
               <Shield className="w-4 h-4 text-slate-700" />
             </div>
-            <h3 className="font-sans text-xs uppercase tracking-[0.08em] text-[#0b3566] font-semibold">Real Data Architecture</h3>
+            <h3 className="font-sans text-xs uppercase tracking-[0.08em] text-slate-900 font-semibold">Real Data Architecture</h3>
           </div>
           <p className="text-xs text-slate-500 leading-relaxed pl-11 font-light">
             Standard modern API structures, custom localStorage inquiries, and complete TypeScript safety. Genuine craftsmanship.

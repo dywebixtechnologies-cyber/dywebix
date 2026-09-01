@@ -31,7 +31,7 @@ interface LogoProps {
 
 /**
  * The dywebixtech logo. `mix-blend-multiply` drops the artwork's white plate
- * onto the site's #EEF4FC background without needing a cut-out PNG.
+ * onto the site's #F8F9FA background without needing a cut-out PNG.
  */
 export function Logo({ variant = 'mark', size = 36, className = '' }: LogoProps) {
   if (variant === 'full') {
