@@ -11,9 +11,11 @@
   --color-brand-ink: #041a37;
 
   /* Surfaces. --surface is the page ground; --surface-tint is the soft blue
-     wash that replaces the old near-white #EEF4FC. */
-  --color-surface: #eef4fc;
-  --color-surface-tint: #dfeaf8;
+     ground and --color-panel the raised card surface sitting on it. */
+  --color-surface: #061c3a;
+  --color-panel: #0b2748;
+  --color-panel-raised: #0e2f5c;
+  --color-hairline: #173a66;
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", sans-serif;
@@ -23,8 +25,11 @@
 
 /* Custom smooth scrolling */
 html {
+  /* Tells the browser the page is dark: scrollbars, form controls and the
+     overscroll gutter all follow, instead of flashing white. */
+  color-scheme: dark;
   scroll-behavior: smooth;
-  background-color: #EEF4FC;
+  background-color: #061c3a;
 }
 
 /* Sub-millisecond glass styling overrides */
@@ -60,4 +65,17 @@ body {
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
+}
+
+/* Form controls on the dark ground. Inputs inherit the page colour, but
+   placeholders default to a grey that is unreadable against navy. */
+input,
+textarea,
+select {
+  color: #ffffff;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6e8cb4;
 }

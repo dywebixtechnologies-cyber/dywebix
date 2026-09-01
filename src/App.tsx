@@ -129,7 +129,7 @@ export default function App() {
   } else {
     viewKey = 'home';
     view = (
-    <div className="bg-[#EEF4FC] text-[#0b3566] min-h-screen selection:bg-[#0c6fc2] selection:text-white font-sans antialiased">
+    <div className="bg-[#061c3a] text-white min-h-screen selection:bg-[#0c6fc2] selection:text-white font-sans antialiased">
 
       {/* Dynamic Header Navbar */}
       <Navigation
@@ -171,13 +171,13 @@ export default function App() {
       </main>
 
       {/* FOOTER SECTION: Minimalist Design-Forward Panel */}
-      <footer className="bg-[#041a37] text-[#9dc0e8] border-t border-[#0b3566] py-16 px-6">
+      <footer className="bg-[#03101f] text-[#9dc0e8] border-t border-[#0b3566] py-16 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 border-b border-[#0b3566] pb-12">
           
           {/* Logo Brand Descriptor (Columns 1-4) */}
           <div className="md:col-span-4 space-y-4">
             <div className="flex items-center">
-              <div className="inline-flex items-center bg-white rounded-md px-3 py-2">
+              <div className="inline-flex items-center">
                 <Logo variant="full" size={28} />
               </div>
             </div>
@@ -189,7 +189,7 @@ export default function App() {
           {/* Quick Sitemap Links (Columns 5-8) */}
           <div className="md:col-span-4 grid grid-cols-2 gap-8">
             <div className="space-y-4">
-              <span className="font-mono text-[9px] uppercase tracking-widest text-[#5f8cc4] font-bold block">NAVIGATION</span>
+              <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#5f8cc4] font-bold block">NAVIGATION</span>
               <ul className="space-y-2.5 text-xs">
                  <li>
                   <button onClick={() => handleSectionChange('services')} className="hover:text-[#dfeaf8] transition-colors cursor-pointer">
@@ -215,7 +215,7 @@ export default function App() {
             </div>
 
             <div className="space-y-4">
-              <span className="font-mono text-[9px] uppercase tracking-widest text-[#5f8cc4] font-bold block">CAPABILITIES</span>
+              <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#5f8cc4] font-bold block">CAPABILITIES</span>
               <ul className="space-y-2 text-xs font-light text-[#7fa9dc]">
                 <li>Dynamic React Hooks</li>
                 <li>Tailwind Utility Art</li>
@@ -227,8 +227,8 @@ export default function App() {
 
           {/* Business Hours / Technical Meta (Columns 9-12) */}
           <div className="md:col-span-4 space-y-4">
-            <span className="font-mono text-[9px] uppercase tracking-widest text-[#5f8cc4] font-bold block">STUDIO DETAILS</span>
-            <div className="space-y-3 font-mono text-[10.5px]">
+            <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#5f8cc4] font-bold block">STUDIO DETAILS</span>
+            <div className="space-y-3 font-sans text-[10.5px]">
               <div className="flex items-center gap-2">
                 <Clock className="w-3.5 h-3.5 text-[#5f8cc4]" />
                 <span>Response Time: &lt; 3 Hours</span>

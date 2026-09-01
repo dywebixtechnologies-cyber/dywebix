@@ -31,7 +31,7 @@ export default function ShowcaseCards({ cards }: { cards: ShowcaseCard[] }) {
       {cards.map((c) => (
         <Card key={c.tag} className="p-8 flex flex-col justify-between text-white">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/50">{c.tag}</span>
+            <span className="font-sans text-xs uppercase tracking-[0.08em] text-white/50">{c.tag}</span>
             <c.icon className="w-5 h-5 text-white/80" />
           </div>
           <div>
@@ -40,7 +40,7 @@ export default function ShowcaseCards({ cards }: { cards: ShowcaseCard[] }) {
             </h3>
             <p className="mt-3 text-sm text-white/60 font-light leading-relaxed">{c.text}</p>
           </div>
-          <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-white/70">
+          <div className="flex items-center gap-1.5 font-sans text-xs uppercase tracking-[0.08em] text-white/70">
             dywebixtech <ArrowUpRight className="w-3.5 h-3.5" />
           </div>
         </Card>

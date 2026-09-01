@@ -66,22 +66,22 @@ export function UserDashboard() {
   const pendingCount = total - acceptedCount;
 
   return (
-    <div className="min-h-screen bg-[#EEF4FC] text-[#0b3566] font-sans antialiased">
+    <div className="min-h-screen bg-[#061c3a] text-white font-sans antialiased">
       {/* Top Bar */}
-      <header className="sticky top-0 z-40 bg-[#EEF4FC]/90 backdrop-blur-md border-b border-slate-200/60">
+      <header className="sticky top-0 z-40 bg-[#061c3a]/90 backdrop-blur-md border-b border-[#173a66]/60">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 text-[#0b3566]">
+          <div className="flex items-center gap-2.5 text-white">
             <Logo variant="full" size={30} />
-            <span className="h-6 w-px bg-slate-200" />
-            <span className="font-display font-medium text-sm tracking-tight text-[#0b3566]">My Dashboard</span>
+            <span className="h-6 w-px bg-[#173a66]" />
+            <span className="font-display font-medium text-sm tracking-tight text-white">My Dashboard</span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="/" className="hidden sm:flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-slate-500 hover:text-[#0c6fc2] transition-colors">
+            <a href="/" className="hidden sm:flex items-center gap-1.5 font-sans text-xs uppercase tracking-[0.08em] text-[#8fabcf] hover:text-[#0c6fc2] transition-colors">
               <ArrowLeft className="w-3 h-3" /> View site
             </a>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 border border-[#cbdff5] rounded px-3 py-1.5 hover:bg-[#dfeaf8] font-mono text-[10px] uppercase tracking-widest text-slate-600 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 border border-[#173a66] rounded px-3 py-1.5 hover:bg-[#0e2f5c] font-sans text-xs uppercase tracking-[0.08em] text-[#a8c1e0] transition-all cursor-pointer"
               id="user-logout-btn"
             >
               <LogOut className="w-3.5 h-3.5" /> Log out
@@ -94,71 +94,71 @@ export function UserDashboard() {
         <div className="max-w-7xl mx-auto">
           {/* Greeting */}
           <div className="mb-12">
-            <span className="font-mono text-[10px] text-slate-400 uppercase tracking-widest block mb-3">[ CLIENT WORKSPACE ]</span>
-            <h1 className="font-display font-light text-3xl md:text-5xl tracking-tight text-[#072750]">
+            <span className="font-sans text-xs text-[#7f9cc4] uppercase tracking-[0.08em] block mb-3">Your projects</span>
+            <h1 className="font-display font-light text-3xl md:text-5xl tracking-tight text-white">
               Welcome, {user?.name.split(' ')[0]}.
             </h1>
-            <p className="font-sans text-slate-500 text-sm md:text-base mt-3 font-light max-w-xl">
+            <p className="font-sans text-[#8fabcf] text-sm md:text-base mt-3 font-light max-w-xl">
               Track the project ideas you've shared, see which ones the studio has accepted, and how long they've been in progress.
             </p>
           </div>
 
           {/* Overview metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-white border border-[#cbdff5] p-6 rounded-md shadow-xs flex items-center justify-between">
+            <div className="bg-[#0b2748] border border-[#173a66] p-6 rounded-md shadow-xs flex items-center justify-between">
               <div className="space-y-1">
-                <span className="font-mono text-[9px] uppercase tracking-widest text-slate-400 block">PROJECTS REQUESTED</span>
-                <span className="font-sans font-bold text-3xl text-[#0b3566] leading-none block">{total}</span>
-                <span className="text-slate-500 text-[10px] block font-light">Ideas you've submitted</span>
+                <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#7f9cc4] block">PROJECTS REQUESTED</span>
+                <span className="font-sans font-bold text-3xl text-white leading-none block">{total}</span>
+                <span className="text-[#8fabcf] text-xs block font-light">Ideas you've submitted</span>
               </div>
-              <div className="w-10 h-10 rounded bg-[#eef4fc] flex items-center justify-center border border-slate-200/80">
-                <FolderKanban className="w-4 h-4 text-slate-600" />
+              <div className="w-10 h-10 rounded bg-[#061c3a] flex items-center justify-center border border-[#173a66]/80">
+                <FolderKanban className="w-4 h-4 text-[#a8c1e0]" />
               </div>
             </div>
 
-            <div className="bg-white border border-[#cbdff5] p-6 rounded-md shadow-xs flex items-center justify-between">
+            <div className="bg-[#0b2748] border border-[#173a66] p-6 rounded-md shadow-xs flex items-center justify-between">
               <div className="space-y-1">
-                <span className="font-mono text-[9px] uppercase tracking-widest text-slate-400 block">ACCEPTED BY ADMIN</span>
+                <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#7f9cc4] block">ACCEPTED BY ADMIN</span>
                 <span className="font-sans font-bold text-3xl text-[#10b981] leading-none block">{acceptedCount}</span>
-                <span className="text-slate-500 text-[10px] block font-light">Approved & in the pipeline</span>
+                <span className="text-[#8fabcf] text-xs block font-light">Approved & in the pipeline</span>
               </div>
               <div className="w-10 h-10 rounded bg-emerald-50/40 flex items-center justify-center border border-emerald-100">
                 <CheckCircle2 className="w-4 h-4 text-[#10b981]" />
               </div>
             </div>
 
-            <div className="bg-white border border-[#cbdff5] p-6 rounded-md shadow-xs flex items-center justify-between">
+            <div className="bg-[#0b2748] border border-[#173a66] p-6 rounded-md shadow-xs flex items-center justify-between">
               <div className="space-y-1">
-                <span className="font-mono text-[9px] uppercase tracking-widest text-slate-400 block">AWAITING REVIEW</span>
-                <span className="font-sans font-bold text-3xl text-[#0b3566] leading-none block">{pendingCount}</span>
-                <span className="text-slate-500 text-[10px] block font-light">Pending the studio's response</span>
+                <span className="font-sans text-[11px] uppercase tracking-[0.08em] text-[#7f9cc4] block">AWAITING REVIEW</span>
+                <span className="font-sans font-bold text-3xl text-white leading-none block">{pendingCount}</span>
+                <span className="text-[#8fabcf] text-xs block font-light">Pending the studio's response</span>
               </div>
-              <div className="w-10 h-10 rounded bg-[#eef4fc] flex items-center justify-center border border-slate-200/80">
-                <Hourglass className="w-4 h-4 text-slate-600" />
+              <div className="w-10 h-10 rounded bg-[#061c3a] flex items-center justify-center border border-[#173a66]/80">
+                <Hourglass className="w-4 h-4 text-[#a8c1e0]" />
               </div>
             </div>
           </div>
 
           {/* Projects list */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-mono text-[10px] uppercase tracking-widest text-[#0b3566] font-semibold">Your Project Ideas</h2>
+            <h2 className="font-sans text-xs uppercase tracking-[0.08em] text-white font-semibold">Your Project Ideas</h2>
             <button
               onClick={goToContact}
-              className="flex items-center gap-2 rounded-full bg-[#0c6fc2] h-10 px-5 text-white hover:bg-[#072750] font-mono text-[10px] tracking-widest uppercase transition-all cursor-pointer"
+              className="flex items-center gap-2 rounded-full bg-[#0c6fc2] h-10 px-5 text-white hover:bg-[#0b2748] font-sans text-xs tracking-[0.08em] uppercase transition-all cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" /> New Idea
             </button>
           </div>
 
           {projects.length === 0 ? (
-            <div className="bg-white border border-dashed border-slate-300 rounded-md p-12 text-center flex flex-col items-center gap-4">
-              <FolderKanban className="w-8 h-8 text-slate-300" />
-              <p className="text-slate-500 text-sm font-light max-w-sm">
+            <div className="bg-[#0b2748] border border-dashed border-[#2d5c94] rounded-md p-12 text-center flex flex-col items-center gap-4">
+              <FolderKanban className="w-8 h-8 text-[#6e8cb4]" />
+              <p className="text-[#8fabcf] text-sm font-light max-w-sm">
                 You haven't shared any project ideas yet. Submit your first idea and it'll appear here once the studio reviews it.
               </p>
               <button
                 onClick={goToContact}
-                className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#072750] border-b border-slate-300 pb-0.5 hover:gap-3 transition-all cursor-pointer"
+                className="flex items-center gap-2 font-sans text-xs uppercase tracking-[0.08em] text-white border-b border-[#2d5c94] pb-0.5 hover:gap-3 transition-all cursor-pointer"
               >
                 Share an idea <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -172,27 +172,27 @@ export function UserDashboard() {
                     key={p.id}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white border border-[#cbdff5] rounded-md p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4"
+                    className="bg-[#0b2748] border border-[#173a66] rounded-md p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4"
                   >
                     <div className="flex-1 min-w-0 space-y-1.5">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-[9px] bg-[#0c6fc2] text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider">{p.id}</span>
+                        <span className="font-sans text-[11px] bg-[#0c6fc2] text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider">{p.id}</span>
                         {p.finished ? (
-                          <span className="font-mono text-[9px] bg-indigo-600 text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider flex items-center gap-1">
+                          <span className="font-sans text-[11px] bg-indigo-600 text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider flex items-center gap-1">
                             <CheckCircle2 className="w-3 h-3" /> Completed
                           </span>
                         ) : p.accepted ? (
-                          <span className="font-mono text-[9px] bg-[#10b981] text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider flex items-center gap-1">
+                          <span className="font-sans text-[11px] bg-[#10b981] text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider flex items-center gap-1">
                             <CheckCircle2 className="w-3 h-3" /> Accepted
                           </span>
                         ) : (
-                          <span className="font-mono text-[9px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-bold uppercase tracking-wider flex items-center gap-1">
+                          <span className="font-sans text-[11px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-bold uppercase tracking-wider flex items-center gap-1">
                             <Hourglass className="w-3 h-3" /> Pending
                           </span>
                         )}
                       </div>
-                      <p className="text-[#0b3566] text-sm font-medium truncate">{p.projectType || 'Custom project'}</p>
-                      <p className="text-slate-500 text-xs font-light line-clamp-2">{p.details}</p>
+                      <p className="text-white text-sm font-medium truncate">{p.projectType || 'Custom project'}</p>
+                      <p className="text-[#8fabcf] text-xs font-light line-clamp-2">{p.details}</p>
                       {p.finished && (
                         <p className="mt-1 inline-flex items-center gap-1.5 text-indigo-600 text-xs font-semibold">
                           <Sparkles className="w-3.5 h-3.5" /> Your idea is built!
@@ -200,24 +200,24 @@ export function UserDashboard() {
                       )}
                     </div>
 
-                    <div className="flex items-center gap-6 md:gap-8 shrink-0 border-t md:border-t-0 md:border-l border-[#dfeaf8] pt-4 md:pt-0 md:pl-8">
+                    <div className="flex items-center gap-6 md:gap-8 shrink-0 border-t md:border-t-0 md:border-l border-[#173a66] pt-4 md:pt-0 md:pl-8">
                       <div className="space-y-0.5">
-                        <span className="font-mono text-[8px] text-slate-400 uppercase tracking-wider block">Rate</span>
-                        <span className="text-[#0b3566] text-sm font-semibold flex items-center gap-1">
+                        <span className="font-sans text-[11px] text-[#7f9cc4] uppercase tracking-wider block">Rate</span>
+                        <span className="text-white text-sm font-semibold flex items-center gap-1">
                           {p.rate ? (
-                            <><IndianRupee className="w-3.5 h-3.5 text-slate-400" />{p.rate.replace(/^₹/, '')}</>
+                            <><IndianRupee className="w-3.5 h-3.5 text-[#7f9cc4]" />{p.rate.replace(/^₹/, '')}</>
                           ) : (
-                            <span className="text-slate-400 font-normal text-xs">To be set</span>
+                            <span className="text-[#7f9cc4] font-normal text-xs">To be set</span>
                           )}
                         </span>
                       </div>
                       <div className="space-y-0.5">
-                        <span className="font-mono text-[8px] text-slate-400 uppercase tracking-wider block">Since Accepted</span>
-                        <span className="text-[#0b3566] text-sm font-semibold flex items-center gap-1">
+                        <span className="font-sans text-[11px] text-[#7f9cc4] uppercase tracking-wider block">Since Accepted</span>
+                        <span className="text-white text-sm font-semibold flex items-center gap-1">
                           {p.accepted && days !== null ? (
-                            <><Clock className="w-3.5 h-3.5 text-slate-400" />{days} {days === 1 ? 'day' : 'days'}</>
+                            <><Clock className="w-3.5 h-3.5 text-[#7f9cc4]" />{days} {days === 1 ? 'day' : 'days'}</>
                           ) : (
-                            <span className="text-slate-400 font-normal text-xs">—</span>
+                            <span className="text-[#7f9cc4] font-normal text-xs">—</span>
                           )}
                         </span>
                       </div>
