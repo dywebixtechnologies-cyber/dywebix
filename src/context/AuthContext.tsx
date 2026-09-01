@@ -33,6 +33,17 @@ interface AuthContextValue {
   logout: () => Promise<void>;
 }
 
+/**
+ * Whether this page load is the landing leg of an OAuth redirect. supabase-js
+ * removes its parameters from the URL as soon as it exchanges them, so this
+ * has to be read at module load, before the provider mounts.
+ */
+const IS_OAUTH_RETURN =
+  typeof window !== 'undefined' &&
+  (window.location.search.includes('code=') ||
+    window.location.hash.includes('access_token=') ||
+    window.location.hash.includes('error_description='));
+
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 const NOT_CONFIGURED: AuthResult = {
@@ -107,8 +118,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     // Covers sign-in, sign-out, token refresh, and the OAuth redirect landing.
-    const { data: sub } = db.auth.onAuthStateChange(() => {
-      void hydrate().then((u) => !cancelled && setUser(u));
+    const { data: sub } = db.auth.onAuthStateChange((event) => {
+      void hydrate().then((u) => {
+        if (cancelled) return;
+        setUser(u);
+
+        if (event === 'SIGNED_IN' && IS_OAUTH_RETURN && u) {
+          // Assigning the hash fires hashchange, which the router listens for.
+          const target = u.role === 'admin' ? '#admin' : '#dashboard';
+          if (window.location.hash !== target) window.location.hash = target;
+        }
+      });
     });
 
     return () => {
@@ -191,7 +211,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const { error } = await db.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/#dashboard` },
+      // No fragment: Supabase appends its own, and the hash router would
+      // fight it. Where to land is decided on SIGNED_IN above.
+      options: { redirectTo: `${window.location.origin}/` },
     });
     if (error) {
       if (error.message.toLowerCase().includes('provider is not enabled')) {

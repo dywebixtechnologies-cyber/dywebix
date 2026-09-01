@@ -25,7 +25,7 @@ import { Clock, Monitor, ShieldCheck, Heart } from 'lucide-react';
 import { Logo } from './components/Logo';
 
 export default function App() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [activeSection, setActiveSection] = useState('hero');
   const [unreadCount, setUnreadCount] = useState(0);
   const [selectedServicePreset, setSelectedServicePreset] = useState('');
@@ -94,7 +94,12 @@ export default function App() {
   let view: React.ReactNode;
   let viewKey: string;
 
-  if (route === '#login' || route === '#signup') {
+  if (authLoading && (route === '#login' || route === '#signup' || route === '#dashboard' || route === '#admin')) {
+    // Session restore is in flight; showing the login form here would flash it
+    // to users who are already signed in.
+    view = <PageLoader />;
+    viewKey = 'auth-loading';
+  } else if (route === '#login' || route === '#signup') {
     // Already signed in? Send them to the right dashboard instead.
     if (user) {
       view = user.role === 'admin'
